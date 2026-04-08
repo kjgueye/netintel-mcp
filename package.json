@@ -1,6 +1,11 @@
 {
   "name": "netintel-mcp",
-  "version": "1.0.0",
+  "version": "1.0.1",
+  "mcpName": "io.github.kjgueye/netintel-mcp",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kjgueye/netintel-mcp.git"
+  },
   "description": "MCP server for NetIntel — DNS, SSL, WHOIS, email security, OSINT via x402 micropayments",
   "main": "dist/index.js",
   "bin": {
