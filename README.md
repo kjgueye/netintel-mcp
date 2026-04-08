@@ -1,6 +1,6 @@
 # netintel-mcp
 
-MCP server for NetIntel — 25 network intelligence tools for AI agents.
+MCP server for NetIntel — 36 network intelligence tools for AI agents.
 DNS, SSL, WHOIS, email security, cloud fingerprinting, OSINT and more.
 Pay-per-call via x402 on Base mainnet. No API keys needed — just a wallet with USDC.
 
@@ -58,6 +58,17 @@ Or add manually to your Claude Desktop config:
 | netintel_rss_parser | RSS/Atom feed parser | $0.001 |
 | netintel_username_check | Username availability (20+ platforms) | $0.003 |
 | netintel_wayback_lookup | Wayback Machine snapshots | $0.001 |
+| netintel_ip_reputation | IP reputation via AbuseIPDB + AlienVault OTX | $0.010 |
+| netintel_cron_parser | Parse cron expressions, explain schedule | $0.001 |
+| netintel_currency_exchange | Convert between 32 currencies | $0.001 |
+| netintel_github_intel | GitHub repo metrics and maintenance score | $0.001 |
+| netintel_holidays | Public holidays by country | $0.001 |
+| netintel_ip_geo | IP geolocation — country, city, ISP, ASN | $0.001 |
+| netintel_jwt_inspector | Decode JWT tokens, flag security issues | $0.001 |
+| netintel_lang_detect | Detect language with confidence scoring | $0.001 |
+| netintel_npm_intel | npm package analysis and quality score | $0.001 |
+| netintel_sitemap_parser | Parse XML sitemaps, extract URL metadata | $0.001 |
+| netintel_url_safety | Check URL against URLhaus + heuristics | $0.002 |
 
 ## Payment
 All tools pay automatically via x402 on Base mainnet (USDC).
