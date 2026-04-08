@@ -1,0 +1,41 @@
+{
+  "name": "netintel-mcp",
+  "version": "1.0.0",
+  "description": "MCP server for NetIntel — DNS, SSL, WHOIS, email security, OSINT via x402 micropayments",
+  "main": "dist/index.js",
+  "bin": {
+    "netintel-mcp": "dist/index.js"
+  },
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "ts-node src/index.ts",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "mcp",
+    "x402",
+    "dns",
+    "ssl",
+    "security",
+    "osint",
+    "netintel",
+    "network-intelligence"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1",
+    "@x402/axios": "^2.9.0",
+    "@x402/core": "^2.9.0",
+    "@x402/evm": "^2.9.0",
+    "viem": "^2.31.3",
+    "zod": "^3.25.67"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.2",
+    "typescript": "^5.8.3"
+  }
+}
