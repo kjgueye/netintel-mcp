@@ -365,6 +365,153 @@ function registerTools(server: McpServer, api: AxiosInstance) {
       } catch (e) { return err(e); }
     }
   );
+
+  // 26. IP Reputation
+  server.tool(
+    "netintel_ip_reputation",
+    "Check IP against AbuseIPDB and AlienVault OTX. Returns composite risk score, threat categories, and malware families.",
+    { ip: z.string() },
+    async ({ ip }) => {
+      try {
+        const res = await api.get("/ip-reputation/analyze", { params: { ip } });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
+  // 27. Cron Parser
+  server.tool(
+    "netintel_cron_parser",
+    "Parse a cron expression, explain the schedule in plain English, and compute the next 5 run times.",
+    { expression: z.string() },
+    async ({ expression }) => {
+      try {
+        const res = await api.get("/cron-parser/explain", { params: { expression } });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
+  // 28. Currency Exchange
+  server.tool(
+    "netintel_currency_exchange",
+    "Convert between 32 currencies with real-time or historical rates. Pass a date (YYYY-MM-DD) for historical lookup.",
+    { from: z.string(), to: z.string(), amount: z.number().optional(), date: z.string().optional() },
+    async ({ from, to, amount, date }) => {
+      try {
+        const res = await api.get("/currency-exchange/convert", {
+          params: params({ from, to, amount, date }),
+        });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
+  // 29. GitHub Intel
+  server.tool(
+    "netintel_github_intel",
+    "Analyze a GitHub repo — stars, forks, activity, license, open issues, maintenance score. Pass owner/repo format.",
+    { repo: z.string() },
+    async ({ repo }) => {
+      try {
+        const res = await api.get("/github-intel/analyze", { params: { repo } });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
+  // 30. Holidays
+  server.tool(
+    "netintel_holidays",
+    "Get public holidays by country. Check if a date is a business day or weekend. ISO 3166-1 alpha-2 country codes.",
+    { country: z.string(), year: z.number().optional(), month: z.number().optional() },
+    async ({ country, year, month }) => {
+      try {
+        const res = await api.get("/holidays/check", {
+          params: params({ country, year, month }),
+        });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
+  // 31. IP Geo
+  server.tool(
+    "netintel_ip_geo",
+    "Geolocate an IP address — country, city, coordinates, ISP, ASN, timezone.",
+    { ip: z.string() },
+    async ({ ip }) => {
+      try {
+        const res = await api.get("/ip-geo/locate", { params: { ip } });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
+  // 32. JWT Inspector
+  server.tool(
+    "netintel_jwt_inspector",
+    "Decode a JWT token — inspect header and payload, check expiry, flag security issues like weak algorithms.",
+    { token: z.string() },
+    async ({ token }) => {
+      try {
+        const res = await api.get("/jwt-inspector/decode", { params: { token } });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
+  // 33. Lang Detect (POST)
+  server.tool(
+    "netintel_lang_detect",
+    "Detect the language of any text with confidence scoring. Supports 50+ languages.",
+    { text: z.string() },
+    async ({ text }) => {
+      try {
+        const res = await api.post("/lang-detect/analyze", { text });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
+  // 34. npm Intel
+  server.tool(
+    "netintel_npm_intel",
+    "Analyze an npm package — versions, weekly downloads, maintainers, dependencies, quality and maintenance score.",
+    { package: z.string() },
+    async (args) => {
+      try {
+        const res = await api.get("/npm-intel/analyze", { params: { package: args.package } });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
+  // 35. Sitemap Parser
+  server.tool(
+    "netintel_sitemap_parser",
+    "Parse an XML sitemap or auto-discover it from a domain. Returns all URLs with metadata including lastmod and priority.",
+    { url: z.string() },
+    async ({ url }) => {
+      try {
+        const res = await api.get("/sitemap-parser/fetch", { params: { url } });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
+  // 36. URL Safety
+  server.tool(
+    "netintel_url_safety",
+    "Check a URL against URLhaus malware database and heuristic analysis. Returns threat classification and risk score.",
+    { url: z.string() },
+    async ({ url }) => {
+      try {
+        const res = await api.get("/url-safety/check", { params: { url } });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
 }
 
 async function main() {
@@ -372,7 +519,7 @@ async function main() {
 
   const server = new McpServer({
     name: "netintel-mcp",
-    version: "1.0.0",
+    version: "1.1.0",
   });
 
   registerTools(server, api);
