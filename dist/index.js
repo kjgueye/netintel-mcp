@@ -400,6 +400,86 @@ function registerTools(server, api) {
             return err(e);
         }
     });
+    // 37. Domain Age
+    server.tool("netintel_domain_age", "Determine a domain's age from registration data and archival history — returns creation date, age in years, first Wayback Machine capture, total archived snapshots, and a maturity signal so agents can assess domain trustworthiness and…", { domain: z.string() }, async ({ domain }) => {
+        try {
+            const res = await api.get("/domain-age/check", { params: { domain } });
+            return ok(res.data);
+        }
+        catch (e) {
+            return err(e);
+        }
+    });
+    // 38. Bulk Domain (POST)
+    server.tool("netintel_bulk_domain", "Check availability of many domain names across multiple TLDs in a single call — submit up to 50 name/TLD combinations and get back per-domain registration status, registrar, and expiry concurrently, so agents can scan an entire naming…", { names: z.array(z.string()), tlds: z.array(z.string()).optional() }, async ({ names, tlds }) => {
+        try {
+            const res = await api.post("/bulk-domain/check", { names, tlds });
+            return ok(res.data);
+        }
+        catch (e) {
+            return err(e);
+        }
+    });
+    // 39. Domain Appraise
+    server.tool("netintel_domain_appraise", "Estimate the market value tier of a domain name using transparent heuristics — length, TLD premium, dictionary-word presence, pronounceability, keyword value, and numeric/hyphen penalties — returns a value tier and 0-100 quality score so…", { domain: z.string() }, async ({ domain }) => {
+        try {
+            const res = await api.get("/domain-appraise/estimate", { params: { domain } });
+            return ok(res.data);
+        }
+        catch (e) {
+            return err(e);
+        }
+    });
+    // 40. Domain Report
+    server.tool("netintel_domain_report", "One call returns a complete intelligence profile for a domain — WHOIS registration, DNS records, SSL certificate, detected tech stack, and blacklist status — aggregated into a single risk-scored report so agents can fully vet a domain…", { domain: z.string() }, async ({ domain }) => {
+        try {
+            const res = await api.get("/domain-report/analyze", { params: { domain } });
+            return ok(res.data);
+        }
+        catch (e) {
+            return err(e);
+        }
+    });
+    // 41. Ip Risk
+    server.tool("netintel_ip_risk", "One call returns a complete risk profile for an IP address — geolocation, ASN/network owner, blacklist status across multiple DNSBLs, and proxy/VPN/hosting classification — aggregated into a single verdict so agents can make a block/allow…", { ip: z.string() }, async ({ ip }) => {
+        try {
+            const res = await api.get("/ip-risk/score", { params: { ip } });
+            return ok(res.data);
+        }
+        catch (e) {
+            return err(e);
+        }
+    });
+    // 42. Name Gen
+    server.tool("netintel_name_gen", "Generate brandable startup/product names from a keyword using prefixes, suffixes, blends, and phonetic patterns, then check .com (or any TLD) availability for each via DNS — returns available names ranked by a brandability heuristic so…", { keyword: z.string(), tld: z.string().optional(), limit: z.number().optional() }, async ({ keyword, tld, limit }) => {
+        try {
+            const res = await api.get("/name-gen/suggest", { params: params({ keyword, tld, limit }) });
+            return ok(res.data);
+        }
+        catch (e) {
+            return err(e);
+        }
+    });
+    // 43. Tld Price
+    server.tool("netintel_tld_price", "Compare registration, renewal, and transfer prices for a TLD across major registrars, or for a single domain name across many TLDs — returns sorted reference pricing so agents can find the cheapest place to register, budget domain…", { tld: z.string().optional(), name: z.string().optional() }, async ({ tld, name }) => {
+        try {
+            const res = await api.get("/tld-price/compare", { params: params({ tld, name }) });
+            return ok(res.data);
+        }
+        catch (e) {
+            return err(e);
+        }
+    });
+    // 44. Typosquat
+    server.tool("netintel_typosquat", "Generate common typo and look-alike variations of a domain and check which are already registered — catches character swaps, omissions, additions, homoglyphs, and alternate TLDs so agents can detect typosquatting and brand-impersonation…", { domain: z.string(), limit: z.number().optional() }, async ({ domain, limit }) => {
+        try {
+            const res = await api.get("/typosquat/scan", { params: params({ domain, limit }) });
+            return ok(res.data);
+        }
+        catch (e) {
+            return err(e);
+        }
+    });
 }
 async function main() {
     const api = await createClient();
