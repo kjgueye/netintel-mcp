@@ -600,6 +600,56 @@ function registerTools(server, api) {
             return err(e);
         }
     });
+    // 57. Extract (POST)
+    server.tool("netintel_extract", "Parse and normalize a freeform address string using Claude Haiku — splits it into street, city, state/region, postal code, and country, plus a normalized single-line form, so agents can clean and standardize messy address data for…", { address: z.string() }, async ({ address }) => {
+        try {
+            const res = await api.post("/extract/address", { address });
+            return ok(res.data);
+        }
+        catch (e) {
+            return err(e);
+        }
+    });
+    // 58. Extract (POST)
+    server.tool("netintel_extract_contact", "Extract structured contact details from text, an email signature, or webpage text using Claude Haiku — returns name, title, company, email, phone, and address as clean JSON so agents can turn unstructured contact blocks into CRM-ready…", { text: z.string() }, async ({ text }) => {
+        try {
+            const res = await api.post("/extract/contact", { text });
+            return ok(res.data);
+        }
+        catch (e) {
+            return err(e);
+        }
+    });
+    // 59. Extract (POST)
+    server.tool("netintel_extract_invoice", "Extract structured data from invoice or receipt text using Claude Haiku — returns vendor, invoice number, dates, line items, subtotal, tax, total, and currency as clean JSON so agents can automate accounts-payable, expense processing, and…", { text: z.string() }, async ({ text }) => {
+        try {
+            const res = await api.post("/extract/invoice", { text });
+            return ok(res.data);
+        }
+        catch (e) {
+            return err(e);
+        }
+    });
+    // 60. Extract (POST)
+    server.tool("netintel_extract_resume", "Extract structured data from resume/CV text using Claude Haiku — returns name, contact info, skills, work experience, and education as clean JSON arrays so agents can automate applicant screening, candidate databases, and recruiting…", { text: z.string() }, async ({ text }) => {
+        try {
+            const res = await api.post("/extract/resume", { text });
+            return ok(res.data);
+        }
+        catch (e) {
+            return err(e);
+        }
+    });
+    // 61. Extract (POST)
+    server.tool("netintel_extract_table", "Extract tabular data from messy text or HTML using Claude Haiku — detects columns and rows in unstructured content and returns clean structured JSON (columns + rows) so agents can turn pasted tables, HTML tables, and delimited text into…", { text: z.string() }, async ({ text }) => {
+        try {
+            const res = await api.post("/extract/table", { text });
+            return ok(res.data);
+        }
+        catch (e) {
+            return err(e);
+        }
+    });
 }
 async function main() {
     const api = await createClient();
