@@ -616,6 +616,162 @@ function registerTools(server: McpServer, api: AxiosInstance) {
     }
   );
 
+  // 45. Classify (POST)
+  server.tool(
+    "netintel_classify",
+    "Classify text into caller-supplied categories using Claude Haiku — zero-shot classification where the agent provides the label set and gets back the best-matching category with confidence and per-label scores, so agents can route, tag, and…",
+    { text: z.string(), labels: z.array(z.string()), multi_label: z.boolean().optional() },
+    async ({ text, labels, multi_label }) => {
+      try {
+        const res = await api.post("/classify", { text, labels, multi_label });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
+  // 46. Content Moderate (POST)
+  server.tool(
+    "netintel_content_moderate",
+    "Moderate text content using Claude Haiku — flags categories like harassment, hate, sexual content, violence, self-harm, and spam with per-category severity and an overall allow/flag/block recommendation, so agents can screen user-generated…",
+    { text: z.string() },
+    async ({ text }) => {
+      try {
+        const res = await api.post("/content-moderate", { text });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
+  // 47. Entity Extract (POST)
+  server.tool(
+    "netintel_entity_extract",
+    "Extract named entities from text using Claude Haiku — people, organizations, locations, dates, emails, URLs, money amounts, and products — returned as structured typed arrays so agents can pull structured signals out of unstructured text…",
+    { text: z.string(), types: z.array(z.string()).optional() },
+    async ({ text, types }) => {
+      try {
+        const res = await api.post("/entity-extract", { text, types });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
+  // 48. Sentiment (POST)
+  server.tool(
+    "netintel_sentiment",
+    "Analyze the sentiment of text using Claude Haiku — returns overall polarity (positive/negative/neutral/mixed), a -1 to +1 score, detected emotions, and optional per-aspect sentiment, so agents can gauge tone in reviews, messages, and…",
+    { text: z.string(), aspects: z.array(z.string()).optional() },
+    async ({ text, aspects }) => {
+      try {
+        const res = await api.post("/sentiment/analyze", { text, aspects });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
+  // 49. Text Summarize (POST)
+  server.tool(
+    "netintel_text_summarize",
+    "Summarize any text or web page into a concise summary plus key bullet points using Claude Haiku — accepts raw text or a URL (which it fetches and extracts), enforces an input cap, and returns a clean structured summary so agents can…",
+    { text: z.string().optional(), url: z.string().optional(), max_points: z.number().optional() },
+    async ({ text, url, max_points }) => {
+      try {
+        const res = await api.post("/text-summarize", { text, url, max_points });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
+  // 50. Translate (POST)
+  server.tool(
+    "netintel_translate",
+    "Translate up to 2000 words between languages using Claude Haiku — auto-detects source, supports 30+ target languages, preserves formatting, for larger documents and articles. For short snippets use the cheaper /translate/short.",
+    { text: z.string(), target: z.string(), source: z.string().optional() },
+    async ({ text, target, source }) => {
+      try {
+        const res = await api.post("/translate/long", { text, target, source });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
+  // 51. Translate (POST)
+  server.tool(
+    "netintel_translate_short",
+    "Translate up to 500 words between languages using Claude Haiku — auto-detects source language, supports 30+ target languages, preserves formatting, and returns the translation with detected source so agents can localize short content…",
+    { text: z.string(), target: z.string(), source: z.string().optional() },
+    async ({ text, target, source }) => {
+      try {
+        const res = await api.post("/translate/short", { text, target, source });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
+  // 52. Domain Due Diligence
+  server.tool(
+    "netintel_domain_due_diligence",
+    "One call combines domain availability, heuristic value appraisal, and TLD pricing into a single acquisition brief — tells an agent whether a name is available, what it's worth, and what it costs across TLDs, concurrently and with graceful…",
+    { domain: z.string() },
+    async ({ domain }) => {
+      try {
+        const res = await api.get("/domain-due-diligence", { params: { domain } });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
+  // 53. Domain Report
+  server.tool(
+    "netintel_domain_report_full",
+    "One premium call returns a complete six-part domain profile — DNS records, SSL certificate, WHOIS registration, cloud fingerprint, technology stack, and security headers — each section run concurrently with graceful partial-failure…",
+    { domain: z.string() },
+    async ({ domain }) => {
+      try {
+        const res = await api.get("/domain-report/full", { params: { domain } });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
+  // 54. Email Report
+  server.tool(
+    "netintel_email_report",
+    "One call combines domain email authentication (SPF/DKIM/DMARC), email-address intelligence (deliverability, disposable/role detection), and an optional password breach check into a single email-trust report — each section run concurrently…",
+    { email: z.string(), password: z.string().optional() },
+    async ({ email, password }) => {
+      try {
+        const res = await api.get("/email-report/full", { params: params({ email, password }) });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
+  // 55. Ip Report
+  server.tool(
+    "netintel_ip_report",
+    "One premium call returns a complete five-part IP profile — geolocation, ASN/network ownership, multi-DNSBL blacklist status, threat reputation, and an aggregate risk verdict — run concurrently with graceful partial-failure handling, so…",
+    { ip: z.string() },
+    async ({ ip }) => {
+      try {
+        const res = await api.get("/ip-report/full", { params: { ip } });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
+  // 56. Url Safety
+  server.tool(
+    "netintel_url_safety_full",
+    "One call vets a URL end to end — traces its full redirect chain, checks it against malware/phishing databases, audits its security headers, and inspects its SSL certificate — concurrent with graceful partial-failure handling, so agents get…",
+    { url: z.string() },
+    async ({ url }) => {
+      try {
+        const res = await api.get("/url-safety/full", { params: { url } });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
 }
 
 async function main() {
