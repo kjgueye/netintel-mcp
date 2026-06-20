@@ -837,6 +837,45 @@ function registerTools(server: McpServer, api: AxiosInstance) {
     }
   );
 
+  // 62. Markdown (POST)
+  server.tool(
+    "netintel_markdown",
+    "Convert messy HTML or text into clean, well-structured Markdown using Claude Haiku — strips boilerplate, fixes heading hierarchy, normalizes lists and links, and returns readable Markdown so agents can feed clean docs into downstream…",
+    { text: z.string() },
+    async ({ text }) => {
+      try {
+        const res = await api.post("/markdown/clean", { text });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
+  // 63. Normalize (POST)
+  server.tool(
+    "netintel_normalize",
+    "Conform messy or inconsistent JSON to a target schema using Claude Haiku — renames keys, coerces types (string→number, \"true\"→boolean, etc.), and fills missing fields with null, returning JSON that matches the exact shape the caller…",
+    { data: z.string(), schema: z.record(z.any()) },
+    async ({ data, schema }) => {
+      try {
+        const res = await api.post("/normalize/json", { data, schema });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
+  // 64. Text To Json (POST)
+  server.tool(
+    "netintel_text_to_json",
+    "Turn unstructured text into structured JSON matching a caller-supplied schema using Claude Haiku — the agent declares the fields and types it wants, and gets back populated JSON with values pulled from the text and coerced to the right…",
+    { text: z.string(), schema: z.record(z.any()) },
+    async ({ text, schema }) => {
+      try {
+        const res = await api.post("/text-to-json", { text, schema });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
 }
 
 async function main() {
