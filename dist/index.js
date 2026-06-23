@@ -700,6 +700,36 @@ function registerTools(server, api) {
             return err(e);
         }
     });
+    // 67. Calendar (POST)
+    server.tool("netintel_calendar", "Turn event fields into a valid RFC 5545 .ics calendar file — handles timed and all-day events, escaping, line folding, and a deterministic UID for idempotent re-import — so agents can publish events that import cleanly into Google, Apple…", { title: z.string(), starts_at: z.string(), ends_at: z.string().optional(), all_day: z.boolean().optional(), timezone: z.string().optional(), location: z.string().optional(), description: z.string().optional(), url: z.string().optional(), organizer: z.string().optional() }, async ({ title, starts_at, ends_at, all_day, timezone, location, description, url, organizer }) => {
+        try {
+            const res = await api.post("/calendar/ics", { title, starts_at, ends_at, all_day, timezone, location, description, url, organizer });
+            return ok(res.data);
+        }
+        catch (e) {
+            return err(e);
+        }
+    });
+    // 68. Event Classify (POST)
+    server.tool("netintel_event_classify", "Cheap, fast \"is this a dateable event?\" filter for social and web text — one tiny Haiku call returns is_event, confidence, and a one-line reason, so agents can screen every post for free-ish and only pay for full extraction on the ones…", { text: z.string(), posted_at: z.string().optional(), timezone: z.string().optional() }, async ({ text, posted_at, timezone }) => {
+        try {
+            const res = await api.post("/event-classify", { text, posted_at, timezone });
+            return ok(res.data);
+        }
+        catch (e) {
+            return err(e);
+        }
+    });
+    // 69. Event Extract (POST)
+    server.tool("netintel_event_extract", "Extract a normalized calendar event from any caption, announcement, or page text using Claude Haiku — resolves relative dates (\"this Saturday 7pm\") against the post time and timezone, handles all-day and multi-day events, and returns…", { text: z.string(), posted_at: z.string().optional(), timezone: z.string().optional(), city: z.string().optional() }, async ({ text, posted_at, timezone, city }) => {
+        try {
+            const res = await api.post("/event-extract", { text, posted_at, timezone, city });
+            return ok(res.data);
+        }
+        catch (e) {
+            return err(e);
+        }
+    });
 }
 async function main() {
     const api = await createClient();
