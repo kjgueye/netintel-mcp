@@ -3,7 +3,9 @@ import { registerExactEvmScheme } from "@x402/evm/exact/client";
 import { privateKeyToAccount } from "viem/accounts";
 import axios from "axios";
 
-const BASE_URL = "https://netintel-production-440c.up.railway.app";
+// Canonical domain. The legacy netintel-production-440c.up.railway.app host
+// still serves the same app as a fallback, but new clients target netintel.dev.
+const BASE_URL = "https://netintel.dev";
 
 export async function createClient() {
   const key = process.env.EVM_PRIVATE_KEY;

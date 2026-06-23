@@ -680,6 +680,26 @@ function registerTools(server, api) {
             return err(e);
         }
     });
+    // 65. Web
+    server.tool("netintel_web", "Fetch any web page or PDF and convert it to clean, structured Markdown — strips scripts, nav, ads, and boilerplate while preserving headings, links, lists, tables, code blocks, and blockquotes; extracts the text layer from PDFs. Returns…", { url: z.string() }, async ({ url }) => {
+        try {
+            const res = await api.get("/web/extract", { params: { url } });
+            return ok(res.data);
+        }
+        catch (e) {
+            return err(e);
+        }
+    });
+    // 66. Money (POST)
+    server.tool("netintel_money", "Normalize any messy money string into a typed decimal amount plus ISO 4217 currency — handles symbols, locale separators ($1,234.56 vs €1.234,56), magnitude suffixes (1.2M), accounting notation, and natural-language amounts — so agents can…", { text: z.string(), locale_hint: z.string().optional(), default_currency: z.string().optional(), allow_llm: z.boolean().optional() }, async ({ text, locale_hint, default_currency, allow_llm }) => {
+        try {
+            const res = await api.post("/money/parse", { text, locale_hint, default_currency, allow_llm });
+            return ok(res.data);
+        }
+        catch (e) {
+            return err(e);
+        }
+    });
 }
 async function main() {
     const api = await createClient();
