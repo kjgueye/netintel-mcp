@@ -1,6 +1,6 @@
 # netintel-mcp
 
-MCP server for NetIntel — 69 network intelligence tools for AI agents.
+MCP server for NetIntel — 70 network intelligence tools for AI agents.
 DNS, SSL, WHOIS, email security, cloud fingerprinting, OSINT and more.
 Pay-per-call via x402 on Base mainnet. No API keys needed — just a wallet with USDC.
 
@@ -31,7 +31,7 @@ Or add manually to your Claude Desktop config:
 
 ## Tools
 
-69 pay-per-call tools across DNS, SSL/TLS, WHOIS & domains, email security, IP intelligence, web & content, OSINT, AI text processing, and bundled reports.
+70 pay-per-call tools across DNS, SSL/TLS, WHOIS & domains, email security, IP intelligence, web & content, OSINT, AI text processing, and bundled reports.
 
 | Tool | Description | Price |
 |------|-------------|-------|
@@ -63,7 +63,6 @@ Or add manually to your Claude Desktop config:
 | netintel_ip_reputation | Check an IP address against AbuseIPDB and AlienVault OTX threat feeds… | $0.05 |
 | netintel_cron_parser | Parse any cron expression into a human-readable explanation, validate… | $0.03 |
 | netintel_currency_exchange | Convert any amount between 33 fiat currencies (live European Central… | $0.01 |
-| netintel_github_intel | Fetch public metadata for any GitHub repository — stars, forks, open… | $0.03 |
 | netintel_holidays | Look up public holidays for any country and year, check whether a… | $0.005 |
 | netintel_ip_geo | Geolocate any IPv4 or IPv6 address to city, region, country… | $0.03 |
 | netintel_jwt_inspector | Decode and inspect any JWT token — extracts header algorithm, payload… | $0.005 |
@@ -104,6 +103,8 @@ Or add manually to your Claude Desktop config:
 | netintel_calendar | Turn event fields into a valid RFC 5545 .ics calendar file — handles… | $0.005 |
 | netintel_event_classify | Cheap, fast "is this a dateable event?" filter for social and web text… | $0.02 |
 | netintel_event_extract | Extract a normalized calendar event from any caption, announcement, or… | $0.10 |
+| netintel_messages | OpenAI-compatible chat completions over x402, answered by Claude Sonnet… | $0.06 |
+| netintel_ai_image | Generate agent-ready image assets (icons, logos, social graphics… | $0.25 |
 
 ## Payment
 All tools pay automatically via x402 on Base mainnet (USDC).

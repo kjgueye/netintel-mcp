@@ -730,6 +730,36 @@ function registerTools(server, api) {
             return err(e);
         }
     });
+    // 70. Messages (POST)
+    server.tool("netintel_messages", "OpenAI-compatible chat completions over x402, answered by Claude Sonnet 4.6 — send a messages array and get an assistant reply for Q&A, reasoning, agent planning, coding help, summarization, extraction, classification, and chatbot…", { model: z.string().optional(), messages: z.array(z.any()), max_tokens: z.number().optional(), temperature: z.number().optional(), top_p: z.number().optional() }, async ({ model, messages, max_tokens, temperature, top_p }) => {
+        try {
+            const res = await api.post("/messages", { model, messages, max_tokens, temperature, top_p });
+            return ok(res.data);
+        }
+        catch (e) {
+            return err(e);
+        }
+    });
+    // 71. Ai Image Assets (POST)
+    server.tool("netintel_ai_image_assets", "Generate agent-ready image assets — app icons, logos, social graphics, blog thumbnails, product mockups, banners, OG/web images. Claude first does prompt-engineering for the chosen use case (folding in style and brand colors), screens for…", { prompt: z.string(), use_case: z.string().optional(), style: z.string().optional(), brand_colors: z.array(z.string()).optional(), aspect_ratio: z.string().optional(), quality: z.string().optional(), n: z.number().optional(), provider: z.string().optional() }, async ({ prompt, use_case, style, brand_colors, aspect_ratio, quality, n, provider }) => {
+        try {
+            const res = await api.post("/ai-image-assets/generate", { prompt, use_case, style, brand_colors, aspect_ratio, quality, n, provider });
+            return ok(res.data);
+        }
+        catch (e) {
+            return err(e);
+        }
+    });
+    // 72. Ai Image (POST)
+    server.tool("netintel_ai_image", "Generate agent-ready image assets (icons, logos, social graphics, thumbnails, banners) with gpt-image-1. Claude refines the prompt, screens content, adds alt text and a score. Returns image_url as a base64 PNG data URI. Flat $0.25; n=1…", { prompt: z.string(), use_case: z.string().optional(), aspect_ratio: z.string().optional(), style: z.string().optional(), brand_colors: z.array(z.string()).optional() }, async ({ prompt, use_case, aspect_ratio, style, brand_colors }) => {
+        try {
+            const res = await api.post("/ai-image/generate", { prompt, use_case, aspect_ratio, style, brand_colors });
+            return ok(res.data);
+        }
+        catch (e) {
+            return err(e);
+        }
+    });
 }
 async function main() {
     const api = await createClient();
