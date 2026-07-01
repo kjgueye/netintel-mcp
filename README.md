@@ -41,7 +41,7 @@ Or add manually to your Claude Desktop config:
 | netintel_security_headers | Fetches a URL and evaluates 10 security-critical response headers (CSP… | $0.01 |
 | netintel_email_auth | Email deliverability & domain security check — validates SPF, DKIM… | $0.002 |
 | netintel_cloud_fingerprint | Fingerprints a domain's cloud infrastructure by probing DNS records… | $0.01 |
-| netintel_schema_parse | Accepts unstructured text and a JSON Schema, then uses an LLM to… | $0.10 |
+| netintel_schema_parse | Extract structured data from any unstructured text into your own JSON… | $0.10 |
 | netintel_asn_lookup | Resolves an IP address or domain to its Autonomous System Number (ASN)… | $0.03 |
 | netintel_whois_lookup | WHOIS domain lookup via RDAP — registrar, creation/expiry/updated… | $0.003 |
 | netintel_cert_transparency | Query the crt.sh certificate transparency log database to enumerate all… | $0.01 |
@@ -102,7 +102,7 @@ Or add manually to your Claude Desktop config:
 | netintel_money | Normalize any messy money string into a typed decimal amount plus ISO… | $0.01 |
 | netintel_calendar | Turn event fields into a valid RFC 5545 .ics calendar file — handles… | $0.005 |
 | netintel_event_classify | Cheap, fast "is this a dateable event?" filter for social and web text… | $0.02 |
-| netintel_event_extract | Extract a normalized calendar event from any caption, announcement, or… | $0.10 |
+| netintel_event_extract | Event extraction / event parsing — turn any caption, announcement… | $0.10 |
 | netintel_messages | OpenAI-compatible chat completions over x402, answered by Claude Sonnet… | $0.06 |
 | netintel_ai_image | Generate agent-ready image assets (icons, logos, social graphics… | $0.25 |
 
