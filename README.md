@@ -1,6 +1,6 @@
 # netintel-mcp
 
-MCP server for NetIntel — 70 network intelligence tools for AI agents.
+MCP server for NetIntel — 71 network intelligence tools for AI agents.
 DNS, SSL, WHOIS, email security, cloud fingerprinting, OSINT and more.
 Pay-per-call via x402 on Base mainnet. No API keys needed — just a wallet with USDC.
 
@@ -31,7 +31,7 @@ Or add manually to your Claude Desktop config:
 
 ## Tools
 
-70 pay-per-call tools across DNS, SSL/TLS, WHOIS & domains, email security, IP intelligence, web & content, OSINT, AI text processing, and bundled reports.
+71 pay-per-call tools across DNS, SSL/TLS, WHOIS & domains, email security, IP intelligence, web & content, OSINT, AI text processing, and bundled reports.
 
 | Tool | Description | Price |
 |------|-------------|-------|
@@ -105,6 +105,7 @@ Or add manually to your Claude Desktop config:
 | netintel_event_extract | Event extraction / event parsing — turn any caption, announcement… | $0.10 |
 | netintel_messages | OpenAI-compatible chat completions over x402, answered by Claude Sonnet… | $0.06 |
 | netintel_ai_image | Generate agent-ready image assets (icons, logos, social graphics… | $0.25 |
+| netintel_convert | Convert any physical measurement to another — length, mass, volume… | $0.01 |
 
 ## Payment
 All tools pay automatically via x402 on Base mainnet (USDC).

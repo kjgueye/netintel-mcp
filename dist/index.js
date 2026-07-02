@@ -760,6 +760,16 @@ function registerTools(server, api) {
             return err(e);
         }
     });
+    // 73. Convert
+    server.tool("netintel_convert", "Convert any physical measurement to another — length, mass, volume, temperature, area, speed, pressure, energy, time, data, and angle. Auto-detects the unit category, handles US/imperial ambiguity, and returns the exact converted value…", { value: z.number(), from: z.string(), to: z.string(), system: z.string().optional(), base: z.string().optional() }, async ({ value, from, to, system, base }) => {
+        try {
+            const res = await api.get("/convert", { params: params({ value, from, to, system, base }) });
+            return ok(res.data);
+        }
+        catch (e) {
+            return err(e);
+        }
+    });
 }
 async function main() {
     const api = await createClient();
