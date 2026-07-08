@@ -1,6 +1,6 @@
 # netintel-mcp
 
-MCP server for NetIntel — 72 network intelligence tools for AI agents.
+MCP server for NetIntel — 73 network intelligence tools for AI agents.
 DNS, SSL, WHOIS, email security, cloud fingerprinting, OSINT and more.
 Pay-per-call via x402 on Base mainnet. No API keys needed — just a wallet with USDC.
 
@@ -31,7 +31,7 @@ Or add manually to your Claude Desktop config:
 
 ## Tools
 
-72 pay-per-call tools across DNS, SSL/TLS, WHOIS & domains, email security, IP intelligence, web & content, OSINT, AI text processing, and bundled reports.
+73 pay-per-call tools across DNS, SSL/TLS, WHOIS & domains, email security, IP intelligence, web & content, OSINT, AI text processing, and bundled reports.
 
 | Tool | Description | Price |
 |------|-------------|-------|
@@ -63,6 +63,7 @@ Or add manually to your Claude Desktop config:
 | netintel_ip_reputation | Check an IP address against AbuseIPDB and AlienVault OTX threat feeds… | $0.05 |
 | netintel_cron_parser | Parse any cron expression into a human-readable explanation, validate… | $0.03 |
 | netintel_currency_exchange | Convert any amount between 32 fiat currencies (live European Central… | $0.01 |
+| netintel_github_intel | Fetch public metadata for any GitHub repository — stars, forks, open… | $0.03 |
 | netintel_holidays | Look up public holidays for any country and year, check whether a… | $0.005 |
 | netintel_ip_geo | IP geolocation lookup (geoip / IP location API) — geolocate any IPv4 or… | $0.002 |
 | netintel_jwt_inspector | Decode and inspect any JWT token — extracts header algorithm, payload… | $0.005 |
