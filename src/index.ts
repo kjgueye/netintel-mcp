@@ -954,20 +954,7 @@ function registerTools(server: McpServer, api: AxiosInstance) {
     }
   );
 
-  // 71. Ai Image Assets (POST)
-  server.tool(
-    "netintel_ai_image_assets",
-    "Generate agent-ready image assets — app icons, logos, social graphics, blog thumbnails, product mockups, banners, OG/web images. Claude first does prompt-engineering for the chosen use case (folding in style and brand colors), screens for…",
-    { prompt: z.string(), use_case: z.string().optional(), style: z.string().optional(), brand_colors: z.array(z.string()).optional(), aspect_ratio: z.string().optional(), quality: z.string().optional(), n: z.number().optional(), provider: z.string().optional() },
-    async ({ prompt, use_case, style, brand_colors, aspect_ratio, quality, n, provider }) => {
-      try {
-        const res = await api.post("/ai-image-assets/generate", { prompt, use_case, style, brand_colors, aspect_ratio, quality, n, provider });
-        return ok(res.data);
-      } catch (e) { return err(e); }
-    }
-  );
-
-  // 72. Ai Image (POST)
+  // 71. Ai Image (POST)
   server.tool(
     "netintel_ai_image",
     "Generate agent-ready image assets (icons, logos, social graphics, thumbnails, banners) with gpt-image-1. Claude refines the prompt, screens content, adds alt text and a score. Returns image_url as a base64 PNG data URI. Flat $0.25; n=1…",
@@ -980,7 +967,7 @@ function registerTools(server: McpServer, api: AxiosInstance) {
     }
   );
 
-  // 73. Convert
+  // 72. Convert
   server.tool(
     "netintel_convert",
     "Convert any physical measurement to another — length, mass, volume, temperature, area, speed, pressure, energy, time, data, and angle. Auto-detects the unit category, handles US/imperial ambiguity, and returns the exact converted value…",
@@ -993,7 +980,7 @@ function registerTools(server: McpServer, api: AxiosInstance) {
     }
   );
 
-  // 74. Domain (POST)
+  // 73. Domain (POST)
   server.tool(
     "netintel_domain",
     "Composite 0-100 trust/risk score for a domain in one call — blends domain age, SSL/TLS, DNS health, email auth (SPF/DKIM/DMARC), IP reputation, and certificate transparency into a single \"safe to do business with this domain?\" verdict with…",
