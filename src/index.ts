@@ -993,6 +993,19 @@ function registerTools(server: McpServer, api: AxiosInstance) {
     }
   );
 
+  // 74. Domain (POST)
+  server.tool(
+    "netintel_domain",
+    "Composite 0-100 trust/risk score for a domain in one call — blends domain age, SSL/TLS, DNS health, email auth (SPF/DKIM/DMARC), IP reputation, and certificate transparency into a single \"safe to do business with this domain?\" verdict with…",
+    { domain: z.string() },
+    async ({ domain }) => {
+      try {
+        const res = await api.post("/domain/vendor-risk", { domain });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
 }
 
 async function main() {
