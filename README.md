@@ -1,6 +1,6 @@
 # netintel-mcp
 
-MCP server for NetIntel — 73 network intelligence tools for AI agents.
+MCP server for NetIntel — 78 network intelligence tools for AI agents.
 DNS, SSL, WHOIS, email security, cloud fingerprinting, OSINT and more.
 Pay-per-call via x402 on Base mainnet. No API keys needed — just a wallet with USDC.
 
@@ -31,7 +31,7 @@ Or add manually to your Claude Desktop config:
 
 ## Tools
 
-73 pay-per-call tools across DNS, SSL/TLS, WHOIS & domains, email security, IP intelligence, web & content, OSINT, AI text processing, and bundled reports.
+78 pay-per-call tools across DNS, SSL/TLS, WHOIS & domains, email security, IP intelligence, web & content, OSINT, AI text processing, and bundled reports.
 
 | Tool | Description | Price |
 |------|-------------|-------|
@@ -41,7 +41,7 @@ Or add manually to your Claude Desktop config:
 | netintel_security_headers | Fetches a URL and evaluates 10 security-critical response headers (CSP… | $0.01 |
 | netintel_email_auth | Email deliverability & domain security check — validates SPF, DKIM… | $0.002 |
 | netintel_cloud_fingerprint | Fingerprints a domain's cloud infrastructure by probing DNS records… | $0.01 |
-| netintel_schema_parse | Extract structured data from any unstructured text into your own JSON… | $0.05 |
+| netintel_schema_parse | Extract structured data from any unstructured text into your own JSON… | $0.10 |
 | netintel_asn_lookup | Resolves an IP address or domain to its Autonomous System Number (ASN)… | $0.03 |
 | netintel_whois_lookup | WHOIS domain lookup via RDAP — registrar, creation/expiry/updated… | $0.003 |
 | netintel_cert_transparency | Query the crt.sh certificate transparency log database to enumerate all… | $0.01 |
@@ -108,6 +108,11 @@ Or add manually to your Claude Desktop config:
 | netintel_ai_image | Generate agent-ready image assets (icons, logos, social graphics… | $0.25 |
 | netintel_convert | Convert any physical measurement — length, mass, volume, temperature… | $0.01 |
 | netintel_domain | Composite 0-100 trust/risk score for a domain in one call — blends… | $0.10 |
+| netintel_translate_structured | Translate structured content — JSON, HTML, Markdown, templates, UI… | $0.05 |
+| netintel_translate_batch | Translate many independent strings in one request — each with a caller… | $0.05 |
+| netintel_json | Repair malformed JSON into valid JSON — fixes code fences, trailing… | $0.02 |
+| netintel_schema | Validate data against a supplied schema — checks required fields… | $0.02 |
+| netintel_schema_map | Transform a source object into a target schema — matches fields by… | $0.04 |
 
 ## Payment
 All tools pay automatically via x402 on Base mainnet (USDC).

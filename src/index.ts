@@ -993,6 +993,71 @@ function registerTools(server: McpServer, api: AxiosInstance) {
     }
   );
 
+  // 74. Translate (POST)
+  server.tool(
+    "netintel_translate_structured",
+    "Translate structured content — JSON, HTML, Markdown, templates, UI strings — without breaking structure. Preserves keys, tags, markdown, URLs, emails, variables, placeholders, code blocks, and brand names, honors a caller glossary, and…",
+    { content: z.record(z.any()), content_type: z.string().optional(), target: z.string(), source: z.string().optional(), glossary: z.record(z.any()).optional(), protected_values: z.array(z.any()).optional(), formality: z.string().optional(), tone: z.string().optional(), locale: z.string().optional() },
+    async ({ content, content_type, target, source, glossary, protected_values, formality, tone, locale }) => {
+      try {
+        const res = await api.post("/translate/structured", { content, content_type, target, source, glossary, protected_values, formality, tone, locale });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
+  // 75. Translate (POST)
+  server.tool(
+    "netintel_translate_batch",
+    "Translate many independent strings in one request — each with a caller ID preserved in the response — with per-item status, glossary and tone support, and partial success so one bad item never fails the batch, so agents can localize whole…",
+    { items: z.array(z.any()), target: z.string(), source: z.string().optional(), glossary: z.record(z.any()).optional(), protected_values: z.array(z.any()).optional(), tone: z.string().optional(), formality: z.string().optional() },
+    async ({ items, target, source, glossary, protected_values, tone, formality }) => {
+      try {
+        const res = await api.post("/translate/batch", { items, target, source, glossary, protected_values, tone, formality });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
+  // 76. Json (POST)
+  server.tool(
+    "netintel_json",
+    "Repair malformed JSON into valid JSON — fixes code fences, trailing commas, single quotes, unquoted keys, bad escapes, duplicate keys, truncation, and JSON buried in prose. A deterministic tokenizer runs first (no LLM cost), with an…",
+    { input: z.string(), schema: z.record(z.any()).optional(), allow_llm: z.boolean().optional(), coerce: z.boolean().optional() },
+    async ({ input, schema, allow_llm, coerce }) => {
+      try {
+        const res = await api.post("/json/repair", { input, schema, allow_llm, coerce });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
+  // 77. Schema (POST)
+  server.tool(
+    "netintel_schema",
+    "Validate data against a supplied schema — checks required fields, nested objects, arrays, enums, string formats, numeric ranges, lengths, and additional-property rules deterministically, with optional type coercion and repair, returning…",
+    { data: z.string(), schema: z.record(z.any()), coerce: z.boolean().optional(), repair: z.boolean().optional(), allow_llm: z.boolean().optional() },
+    async ({ data, schema, coerce, repair, allow_llm }) => {
+      try {
+        const res = await api.post("/schema/validate", { data, schema, coerce, repair, allow_llm });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
+  // 78. Schema (POST)
+  server.tool(
+    "netintel_schema_map",
+    "Transform a source object into a target schema — matches fields by alias and structure deterministically, uses an LLM only for semantic mapping when needed, and supports mapping hints, transforms, and defaults, so agents can reshape data…",
+    { source: z.record(z.any()), target_schema: z.record(z.any()), hints: z.record(z.any()).optional(), transforms: z.record(z.any()).optional(), defaults: z.record(z.any()).optional(), mode: z.string().optional(), allow_llm: z.boolean().optional() },
+    async ({ source, target_schema, hints, transforms, defaults, mode, allow_llm }) => {
+      try {
+        const res = await api.post("/schema/map", { source, target_schema, hints, transforms, defaults, mode, allow_llm });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
 }
 
 async function main() {
