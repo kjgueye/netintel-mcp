@@ -820,6 +820,16 @@ function registerTools(server, api) {
             return err(e);
         }
     });
+    // 79. Domain (POST)
+    server.tool("netintel_domain_vet", "Vet and pick a domain in one call — give candidate names, get back a ranked verdict on which to use and whether it's safe to build on: availability across TLDs, name quality, typosquat exposure, and a factual brand-collision check against…", { candidates: z.array(z.string()), tlds: z.array(z.string()).optional(), use_case: z.string().optional(), deep_check_top_n: z.number().optional() }, async ({ candidates, tlds, use_case, deep_check_top_n }) => {
+        try {
+            const res = await api.post("/domain/vet", { candidates, tlds, use_case, deep_check_top_n });
+            return ok(res.data);
+        }
+        catch (e) {
+            return err(e);
+        }
+    });
 }
 async function main() {
     const api = await createClient();
