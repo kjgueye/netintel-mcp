@@ -1071,6 +1071,201 @@ function registerTools(server: McpServer, api: AxiosInstance) {
     }
   );
 
+  // 80. Openai (POST)
+  server.tool(
+    "netintel_openai",
+    "Call OpenAI's gpt-4o via a single pay-per-call x402 endpoint — no OpenAI account or API key needed, pay $0.10 per request in USDC. Standard OpenAI chat.completions request/response shape, capped input and output. Search terms: OpenAI…",
+    { messages: z.array(z.any()), max_tokens: z.number().optional(), temperature: z.number().optional(), top_p: z.number().optional() },
+    async ({ messages, max_tokens, temperature, top_p }) => {
+      try {
+        const res = await api.post("/openai/gpt-4o", { messages, max_tokens, temperature, top_p });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
+  // 81. Openai (POST)
+  server.tool(
+    "netintel_openai_gpt_4_1",
+    "Call OpenAI's gpt-4.1 via a single pay-per-call x402 endpoint — no OpenAI account or API key needed, pay $0.09 per request in USDC. Standard OpenAI chat.completions request/response shape, capped input and output. Search terms: OpenAI…",
+    { messages: z.array(z.any()), max_tokens: z.number().optional(), temperature: z.number().optional(), top_p: z.number().optional() },
+    async ({ messages, max_tokens, temperature, top_p }) => {
+      try {
+        const res = await api.post("/openai/gpt-4-1", { messages, max_tokens, temperature, top_p });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
+  // 82. Openai (POST)
+  server.tool(
+    "netintel_openai_gpt_4_1_mini",
+    "Call OpenAI's gpt-4.1-mini via a single pay-per-call x402 endpoint — no OpenAI account or API key needed, pay $0.02 per request in USDC. Standard OpenAI chat.completions request/response shape, capped input and output. Search terms:…",
+    { messages: z.array(z.any()), max_tokens: z.number().optional(), temperature: z.number().optional(), top_p: z.number().optional() },
+    async ({ messages, max_tokens, temperature, top_p }) => {
+      try {
+        const res = await api.post("/openai/gpt-4-1-mini", { messages, max_tokens, temperature, top_p });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
+  // 83. Openai (POST)
+  server.tool(
+    "netintel_openai_gpt_4o_mini",
+    "Call OpenAI's gpt-4o-mini via a single pay-per-call x402 endpoint — no OpenAI account or API key needed, pay $0.01 per request in USDC. Standard OpenAI chat.completions request/response shape, capped input and output. Search terms: OpenAI…",
+    { messages: z.array(z.any()), max_tokens: z.number().optional(), temperature: z.number().optional(), top_p: z.number().optional() },
+    async ({ messages, max_tokens, temperature, top_p }) => {
+      try {
+        const res = await api.post("/openai/gpt-4o-mini", { messages, max_tokens, temperature, top_p });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
+  // 84. Openai (POST)
+  server.tool(
+    "netintel_openai_gpt_4_1_nano",
+    "Call OpenAI's gpt-4.1-nano via a single pay-per-call x402 endpoint — no OpenAI account or API key needed, pay $0.01 per request in USDC. Standard OpenAI chat.completions request/response shape, capped input and output. Search terms:…",
+    { messages: z.array(z.any()), max_tokens: z.number().optional(), temperature: z.number().optional(), top_p: z.number().optional() },
+    async ({ messages, max_tokens, temperature, top_p }) => {
+      try {
+        const res = await api.post("/openai/gpt-4-1-nano", { messages, max_tokens, temperature, top_p });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
+  // 85. Openai (POST)
+  server.tool(
+    "netintel_openai_gpt_5_5",
+    "Call OpenAI's gpt-5.5 via a single pay-per-call x402 endpoint — no OpenAI account or API key needed, pay $0.65 per request in USDC. Standard OpenAI chat.completions request/response shape, capped input and output. Search terms: OpenAI…",
+    { messages: z.array(z.any()), max_completion_tokens: z.number().optional() },
+    async ({ messages, max_completion_tokens }) => {
+      try {
+        const res = await api.post("/openai/gpt-5-5", { messages, max_completion_tokens });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
+  // 86. Openai (POST)
+  server.tool(
+    "netintel_openai_gpt_5_4",
+    "Call OpenAI's gpt-5.4 via a single pay-per-call x402 endpoint — no OpenAI account or API key needed, pay $0.25 per request in USDC. Standard OpenAI chat.completions request/response shape, capped input and output. Search terms: OpenAI…",
+    { messages: z.array(z.any()), max_completion_tokens: z.number().optional() },
+    async ({ messages, max_completion_tokens }) => {
+      try {
+        const res = await api.post("/openai/gpt-5-4", { messages, max_completion_tokens });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
+  // 87. Openai (POST)
+  server.tool(
+    "netintel_openai_gpt_5_4_mini",
+    "Call OpenAI's gpt-5.4-mini via a single pay-per-call x402 endpoint — no OpenAI account or API key needed, pay $0.04 per request in USDC. Standard OpenAI chat.completions request/response shape, capped input and output. Search terms:…",
+    { messages: z.array(z.any()), max_completion_tokens: z.number().optional() },
+    async ({ messages, max_completion_tokens }) => {
+      try {
+        const res = await api.post("/openai/gpt-5-4-mini", { messages, max_completion_tokens });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
+  // 88. Openai (POST)
+  server.tool(
+    "netintel_openai_gpt_5_4_nano",
+    "Call OpenAI's gpt-5.4-nano via a single pay-per-call x402 endpoint — no OpenAI account or API key needed, pay $0.01 per request in USDC. Standard OpenAI chat.completions request/response shape, capped input and output. Search terms:…",
+    { messages: z.array(z.any()), max_completion_tokens: z.number().optional() },
+    async ({ messages, max_completion_tokens }) => {
+      try {
+        const res = await api.post("/openai/gpt-5-4-nano", { messages, max_completion_tokens });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
+  // 89. Openai (POST)
+  server.tool(
+    "netintel_openai_gpt_5_1",
+    "Call OpenAI's gpt-5.1 via a single pay-per-call x402 endpoint — no OpenAI account or API key needed, pay $0.15 per request in USDC. Standard OpenAI chat.completions request/response shape, capped input and output. Search terms: OpenAI…",
+    { messages: z.array(z.any()), max_completion_tokens: z.number().optional() },
+    async ({ messages, max_completion_tokens }) => {
+      try {
+        const res = await api.post("/openai/gpt-5-1", { messages, max_completion_tokens });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
+  // 90. Openai (POST)
+  server.tool(
+    "netintel_openai_gpt_5_nano",
+    "Call OpenAI's gpt-5-nano via a single pay-per-call x402 endpoint — no OpenAI account or API key needed, pay $0.01 per request in USDC. Standard OpenAI chat.completions request/response shape, capped input and output. Search terms: OpenAI…",
+    { messages: z.array(z.any()), max_completion_tokens: z.number().optional() },
+    async ({ messages, max_completion_tokens }) => {
+      try {
+        const res = await api.post("/openai/gpt-5-nano", { messages, max_completion_tokens });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
+  // 91. Openai (POST)
+  server.tool(
+    "netintel_openai_gpt_5_2",
+    "Call OpenAI's gpt-5.2 via a single pay-per-call x402 endpoint — no OpenAI account or API key needed, pay $0.20 per request in USDC. Standard OpenAI chat.completions request/response shape, capped input and output. Search terms: OpenAI…",
+    { messages: z.array(z.any()), max_completion_tokens: z.number().optional() },
+    async ({ messages, max_completion_tokens }) => {
+      try {
+        const res = await api.post("/openai/gpt-5-2", { messages, max_completion_tokens });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
+  // 92. Openai (POST)
+  server.tool(
+    "netintel_openai_gpt_5_6_sol",
+    "Call OpenAI's gpt-5.6-sol via a single pay-per-call x402 endpoint — no OpenAI account or API key needed, pay $0.65 per request in USDC. Standard OpenAI chat.completions request/response shape, capped input and output. Search terms: OpenAI…",
+    { messages: z.array(z.any()), max_completion_tokens: z.number().optional() },
+    async ({ messages, max_completion_tokens }) => {
+      try {
+        const res = await api.post("/openai/gpt-5-6-sol", { messages, max_completion_tokens });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
+  // 93. Openai (POST)
+  server.tool(
+    "netintel_openai_gpt_5_6_terra",
+    "Call OpenAI's gpt-5.6-terra via a single pay-per-call x402 endpoint — no OpenAI account or API key needed, pay $0.25 per request in USDC. Standard OpenAI chat.completions request/response shape, capped input and output. Search terms:…",
+    { messages: z.array(z.any()), max_completion_tokens: z.number().optional() },
+    async ({ messages, max_completion_tokens }) => {
+      try {
+        const res = await api.post("/openai/gpt-5-6-terra", { messages, max_completion_tokens });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
+  // 94. Openai (POST)
+  server.tool(
+    "netintel_openai_gpt_5_6_luna",
+    "Call OpenAI's gpt-5.6-luna via a single pay-per-call x402 endpoint — no OpenAI account or API key needed, pay $0.06 per request in USDC. Standard OpenAI chat.completions request/response shape, capped input and output. Search terms:…",
+    { messages: z.array(z.any()), max_completion_tokens: z.number().optional() },
+    async ({ messages, max_completion_tokens }) => {
+      try {
+        const res = await api.post("/openai/gpt-5-6-luna", { messages, max_completion_tokens });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
 }
 
 async function main() {
