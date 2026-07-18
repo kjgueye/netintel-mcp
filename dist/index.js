@@ -980,6 +980,36 @@ function registerTools(server, api) {
             return err(e);
         }
     });
+    // 95. V1 (POST)
+    server.tool("netintel_v1", "OpenAI-compatible text embeddings API — standard /v1/embeddings request shape: input as a string or a batch of up to 128 strings (64000 chars total on text-embedding-3-small, the default; 24000 on text-embedding-3-large). Flat $0.005 per…", { input: z.string(), model: z.string().optional(), dimensions: z.number().optional() }, async ({ input, model, dimensions }) => {
+        try {
+            const res = await api.post("/v1/embeddings", { input, model, dimensions });
+            return ok(res.data);
+        }
+        catch (e) {
+            return err(e);
+        }
+    });
+    // 96. Semantic (POST)
+    server.tool("netintel_semantic", "Semantic similarity ranking — send a query plus up to 100 candidate texts, get the candidates back ranked by semantic similarity with scores. No vectors, no cosine math, no embedding model to manage: one call, one price, ranked results…", { query: z.string(), candidates: z.array(z.string()), model: z.string().optional(), top_k: z.number().optional(), min_score: z.number().optional() }, async ({ query, candidates, model, top_k, min_score }) => {
+        try {
+            const res = await api.post("/semantic/rank", { query, candidates, model, top_k, min_score });
+            return ok(res.data);
+        }
+        catch (e) {
+            return err(e);
+        }
+    });
+    // 97. V1 (POST)
+    server.tool("netintel_v1_chat_completions", "OpenAI-compatible chat completions gateway — standard /v1/chat/completions path and request shape, model chosen in the body (gpt-4o, gpt-4.1, gpt-5.6-luna, minis, nanos). Flat $0.10 per call in USDC via x402, no OpenAI account or API key…", { model: z.string(), messages: z.array(z.any()), max_tokens: z.number().optional() }, async ({ model, messages, max_tokens }) => {
+        try {
+            const res = await api.post("/v1/chat/completions", { model, messages, max_tokens });
+            return ok(res.data);
+        }
+        catch (e) {
+            return err(e);
+        }
+    });
 }
 async function main() {
     const api = await createClient();
