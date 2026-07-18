@@ -1266,11 +1266,11 @@ function registerTools(server: McpServer, api: AxiosInstance) {
     }
   );
 
-  // 95. V1 (POST)
+  // 95. V1 Embeddings (POST)
   server.tool(
-    "netintel_v1",
+    "netintel_v1_embeddings",
     "OpenAI-compatible text embeddings API — standard /v1/embeddings request shape: input as a string or a batch of up to 128 strings (64000 chars total on text-embedding-3-small, the default; 24000 on text-embedding-3-large). Flat $0.005 per…",
-    { input: z.string(), model: z.string().optional(), dimensions: z.number().optional() },
+    { input: z.union([z.string(), z.array(z.string())]), model: z.string().optional(), dimensions: z.number().optional() },
     async ({ input, model, dimensions }) => {
       try {
         const res = await api.post("/v1/embeddings", { input, model, dimensions });
@@ -1279,9 +1279,9 @@ function registerTools(server: McpServer, api: AxiosInstance) {
     }
   );
 
-  // 96. Semantic (POST)
+  // 96. Semantic Rank (POST)
   server.tool(
-    "netintel_semantic",
+    "netintel_semantic_rank",
     "Semantic similarity ranking — send a query plus up to 100 candidate texts, get the candidates back ranked by semantic similarity with scores. No vectors, no cosine math, no embedding model to manage: one call, one price, ranked results…",
     { query: z.string(), candidates: z.array(z.string()), model: z.string().optional(), top_k: z.number().optional(), min_score: z.number().optional() },
     async ({ query, candidates, model, top_k, min_score }) => {

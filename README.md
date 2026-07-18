@@ -129,8 +129,8 @@ Or add manually to your Claude Desktop config:
 | netintel_openai_gpt_5_6_sol | Call OpenAI's gpt-5.6-sol via a single pay-per-call x402 endpoint — no… | $0.65 |
 | netintel_openai_gpt_5_6_terra | Call OpenAI's gpt-5.6-terra via a single pay-per-call x402 endpoint —… | $0.25 |
 | netintel_openai_gpt_5_6_luna | Call OpenAI's gpt-5.6-luna via a single pay-per-call x402 endpoint — no… | $0.06 |
-| netintel_v1 | OpenAI-compatible text embeddings API — standard /v1/embeddings request… | $0.005 |
-| netintel_semantic | Semantic similarity ranking — send a query plus up to 100 candidate… | $0.02 |
+| netintel_v1_embeddings | OpenAI-compatible text embeddings API — standard /v1/embeddings request… | $0.005 |
+| netintel_semantic_rank | Semantic similarity ranking — send a query plus up to 100 candidate… | $0.02 |
 | netintel_v1_chat_completions | OpenAI-compatible chat completions gateway — standard… | $0.10 |
 
 ## Payment
