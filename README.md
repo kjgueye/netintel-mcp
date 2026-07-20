@@ -1,6 +1,6 @@
 # netintel-mcp
 
-MCP server for NetIntel — 97 network intelligence tools for AI agents.
+MCP server for NetIntel — 98 network intelligence tools for AI agents.
 DNS, SSL, WHOIS, email security, cloud fingerprinting, OSINT and more.
 Pay-per-call via x402 — the NetIntel API accepts USDC on Base or Solana; this MCP server pays on Base. No API keys needed — just a wallet with USDC.
 
@@ -31,7 +31,7 @@ Or add manually to your Claude Desktop config:
 
 ## Tools
 
-97 pay-per-call tools across DNS, SSL/TLS, WHOIS & domains, email security, IP intelligence, web & content, OSINT, AI text processing, and bundled reports.
+98 pay-per-call tools across DNS, SSL/TLS, WHOIS & domains, email security, IP intelligence, web & content, OSINT, AI text processing, and bundled reports.
 
 | Tool | Description | Price |
 |------|-------------|-------|
@@ -47,7 +47,7 @@ Or add manually to your Claude Desktop config:
 | netintel_cert_transparency | Query the crt.sh certificate transparency log database to enumerate all… | $0.01 |
 | netintel_subnet_calc | Calculates IPv4/IPv6 subnet details from CIDR notation —… | $0.005 |
 | netintel_dns_propagation | Query a domain's DNS record across 10 geographically distributed public… | $0.03 |
-| netintel_dnssec_validate | Validate a domain's DNSSEC configuration by checking for DS records at… | $0.03 |
+| netintel_dnssec_validate | Validate a domain's DNSSEC configuration over DNS-over-HTTPS: DS… | $0.03 |
 | netintel_ip_blacklist | Check an IP address against 15 major DNS blacklists (Spamhaus… | $0.05 |
 | netintel_tech_fingerprint | Fetch a URL and detect the full technology stack from HTTP response… | $0.05 |
 | netintel_breach_check | Check if a password has appeared in known data breaches using the… | $0.01 |
@@ -132,6 +132,7 @@ Or add manually to your Claude Desktop config:
 | netintel_v1_embeddings | OpenAI-compatible text embeddings API — standard /v1/embeddings request… | $0.005 |
 | netintel_semantic_rank | Semantic similarity ranking — send a query plus up to 100 candidate… | $0.02 |
 | netintel_v1_chat_completions | OpenAI-compatible chat completions gateway — standard… | $0.10 |
+| netintel_crypto_market | Structured live crypto market data for ~50 top assets in one JSON call:… | $0.005 |
 
 ## Payment
 All tools pay automatically via x402 in USDC on Base mainnet.

@@ -1305,6 +1305,19 @@ function registerTools(server: McpServer, api: AxiosInstance) {
     }
   );
 
+  // 98. Crypto
+  server.tool(
+    "netintel_crypto_market",
+    "Structured live crypto market data for ~50 top assets in one JSON call: spot price and 24h open/high/low/volume/change (Coinbase Exchange) plus market cap, rank and circulating/total/max supply (CoinGecko). Quote in USD, EUR or GBP. 60s…",
+    { symbol: z.string(), vs: z.string().optional() },
+    async ({ symbol, vs }) => {
+      try {
+        const res = await api.get("/crypto/market", { params: params({ symbol, vs }) });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
 }
 
 async function main() {
