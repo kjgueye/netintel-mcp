@@ -6,12 +6,12 @@
     "url": "https://github.com/kjgueye/netintel-mcp",
     "source": "github"
   },
-  "version": "1.1.32",
+  "version": "1.1.33",
   "packages": [
     {
       "registryType": "npm",
       "identifier": "netintel-mcp",
-      "version": "1.1.32",
+      "version": "1.1.33",
       "transport": {
         "type": "stdio"
       },
