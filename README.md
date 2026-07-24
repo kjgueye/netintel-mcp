@@ -116,15 +116,15 @@ Or add manually to your Claude Desktop config:
 | netintel_domain_vet | Vet and pick a domain in one call — give candidate names, get back a… | $0.20 |
 | netintel_openai | Call OpenAI's gpt-4o via a single pay-per-call x402 endpoint — no… | $0.10 |
 | netintel_openai_gpt_4_1 | Call OpenAI's gpt-4.1 via a single pay-per-call x402 endpoint — no… | $0.09 |
-| netintel_openai_gpt_4_1_mini | Call OpenAI's gpt-4.1-mini via a single pay-per-call x402 endpoint — no… | $0.02 |
-| netintel_openai_gpt_4o_mini | Call OpenAI's gpt-4o-mini via a single pay-per-call x402 endpoint — no… | $0.01 |
-| netintel_openai_gpt_4_1_nano | Call OpenAI's gpt-4.1-nano via a single pay-per-call x402 endpoint — no… | $0.01 |
+| netintel_openai_gpt_4_1_mini | Call OpenAI's gpt-4.1-mini via a single pay-per-call x402 endpoint — no… | $0.005 |
+| netintel_openai_gpt_4o_mini | Call OpenAI's gpt-4o-mini via a single pay-per-call x402 endpoint — no… | $0.005 |
+| netintel_openai_gpt_4_1_nano | Call OpenAI's gpt-4.1-nano via a single pay-per-call x402 endpoint — no… | $0.005 |
 | netintel_openai_gpt_5_5 | Call OpenAI's gpt-5.5 via a single pay-per-call x402 endpoint — no… | $0.65 |
 | netintel_openai_gpt_5_4 | Call OpenAI's gpt-5.4 via a single pay-per-call x402 endpoint — no… | $0.25 |
 | netintel_openai_gpt_5_4_mini | Call OpenAI's gpt-5.4-mini via a single pay-per-call x402 endpoint — no… | $0.04 |
-| netintel_openai_gpt_5_4_nano | Call OpenAI's gpt-5.4-nano via a single pay-per-call x402 endpoint — no… | $0.01 |
+| netintel_openai_gpt_5_4_nano | Call OpenAI's gpt-5.4-nano via a single pay-per-call x402 endpoint — no… | $0.005 |
 | netintel_openai_gpt_5_1 | Call OpenAI's gpt-5.1 via a single pay-per-call x402 endpoint — no… | $0.15 |
-| netintel_openai_gpt_5_nano | Call OpenAI's gpt-5-nano via a single pay-per-call x402 endpoint — no… | $0.01 |
+| netintel_openai_gpt_5_nano | Call OpenAI's gpt-5-nano via a single pay-per-call x402 endpoint — no… | $0.005 |
 | netintel_openai_gpt_5_2 | Call OpenAI's gpt-5.2 via a single pay-per-call x402 endpoint — no… | $0.20 |
 | netintel_openai_gpt_5_6_sol | Call OpenAI's gpt-5.6-sol via a single pay-per-call x402 endpoint — no… | $0.65 |
 | netintel_openai_gpt_5_6_terra | Call OpenAI's gpt-5.6-terra via a single pay-per-call x402 endpoint —… | $0.25 |
