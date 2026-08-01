@@ -1,6 +1,6 @@
 # netintel-mcp
 
-MCP server for NetIntel — 98 network intelligence tools for AI agents.
+MCP server for NetIntel — 108 network intelligence tools for AI agents.
 DNS, SSL, WHOIS, email security, cloud fingerprinting, OSINT and more.
 Pay-per-call via x402 — the NetIntel API accepts USDC on Base or Solana; this MCP server pays on Base. No API keys needed — just a wallet with USDC.
 
@@ -31,7 +31,7 @@ Or add manually to your Claude Desktop config:
 
 ## Tools
 
-98 pay-per-call tools across DNS, SSL/TLS, WHOIS & domains, email security, IP intelligence, web & content, OSINT, AI text processing, and bundled reports.
+108 pay-per-call tools across DNS, SSL/TLS, WHOIS & domains, email security, IP intelligence, web & content, OSINT, AI text processing, and bundled reports.
 
 | Tool | Description | Price |
 |------|-------------|-------|
@@ -133,6 +133,16 @@ Or add manually to your Claude Desktop config:
 | netintel_semantic_rank | Semantic similarity ranking — send a query plus up to 100 candidate… | $0.02 |
 | netintel_v1_chat_completions | OpenAI-compatible chat completions gateway — standard… | $0.10 |
 | netintel_crypto_market | Structured live crypto market data for ~50 top assets in one JSON call:… | $0.005 |
+| netintel_gas_price | Live gas prices across Base, Ethereum, Arbitrum, Optimism, and Polygon… | $0.005 |
+| netintel_crypto_price | Spot prices for up to 25 crypto assets in one call — USD, EUR, or GBP —… | $0.01 |
+| netintel_crypto_ohlc | Historical OHLC candles for any major crypto asset — hourly or daily… | $0.02 |
+| netintel_currency_exchange_batch | Convert one base currency to up to 30 targets in a single call — fiat… | $0.02 |
+| netintel_currency_exchange_history | Daily historical exchange-rate series for any currency pair — fiat via… | $0.02 |
+| netintel_token_info | Full profile for any ERC-20 token by contract address — name, symbol… | $0.02 |
+| netintel_wallet_balance | Native + USDC + custom-token balances for any wallet on Base, Ethereum… | $0.005 |
+| netintel_wallet_intel | Counterparty due-diligence for any Base or Ethereum wallet — age… | $0.05 |
+| netintel_iban_validate | Validate any IBAN offline — mod-97 check digits, per-country structure… | $0.005 |
+| netintel_market_snapshot | One-call market briefing for agents — BTC/ETH/SOL spot + 24h moves… | $0.05 |
 
 ## Payment
 All tools pay automatically via x402 in USDC on Base mainnet.

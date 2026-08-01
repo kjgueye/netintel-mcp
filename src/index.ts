@@ -1318,6 +1318,137 @@ function registerTools(server: McpServer, api: AxiosInstance) {
     }
   );
 
+  // 99. Gas
+  server.tool(
+    "netintel_gas_price",
+    "Live gas prices across Base, Ethereum, Arbitrum, Optimism, and Polygon with USD cost estimates for a transfer, an ERC-20 send, and a swap — keyless, one call, all chains. Per chain: gas price + EIP-1559 base/priority fee in gwei…",
+    { chains: z.string().optional() },
+    async ({ chains }) => {
+      try {
+        const res = await api.get("/gas/price", { params: params({ chains }) });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
+  // 100. Crypto
+  server.tool(
+    "netintel_crypto_price",
+    "Spot prices for up to 25 crypto assets in one call — USD, EUR, or GBP — from Coinbase with Kraken and CoinGecko fallback; no API key, one flat price. Per asset: price, 24h change when the answering source provides it, source, cache age…",
+    { symbols: z.string().optional(), vs: z.string().optional() },
+    async ({ symbols, vs }) => {
+      try {
+        const res = await api.get("/crypto/price", { params: params({ symbols, vs }) });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
+  // 101. Crypto
+  server.tool(
+    "netintel_crypto_ohlc",
+    "Historical OHLC candles for any major crypto asset — hourly or daily, up to 300 candles, with period stats (change %, high, low) — from Coinbase Exchange with Kraken fallback, no API key. Also a price-at-date mode: pass date=YYYY-MM-DD for…",
+    { symbol: z.string().optional(), interval: z.string().optional(), days: z.number().optional(), date: z.string().optional(), vs: z.string().optional() },
+    async ({ symbol, interval, days, date, vs }) => {
+      try {
+        const res = await api.get("/crypto/ohlc", { params: params({ symbol, interval, days, date, vs }) });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
+  // 102. Currency Exchange
+  server.tool(
+    "netintel_currency_exchange_batch",
+    "Convert one base currency to up to 30 targets in a single call — fiat (~200 currencies incl. SAR, AED, COP) and major crypto — ECB reference rates + Coinbase spot, no API key. Per target: rate, converted amount, rate date, source. The…",
+    { from: z.string(), to: z.string(), amount: z.number().optional() },
+    async ({ from, to, amount }) => {
+      try {
+        const res = await api.get("/currency-exchange/batch", { params: params({ from, to, amount }) });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
+  // 103. Currency Exchange
+  server.tool(
+    "netintel_currency_exchange_history",
+    "Daily historical exchange-rate series for any currency pair — fiat via ECB reference data, crypto via Coinbase daily closes — with min/max/average/change stats, no API key. Pass start/end dates or a days lookback (default 30). The history…",
+    { from: z.string(), to: z.string(), start: z.string().optional(), end: z.string().optional(), days: z.number().optional() },
+    async ({ from, to, start, end, days }) => {
+      try {
+        const res = await api.get("/currency-exchange/history", { params: params({ from, to, start, end, days }) });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
+  // 104. Token
+  server.tool(
+    "netintel_token_info",
+    "Full profile for any ERC-20 token by contract address — name, symbol, decimals, supply from the chain itself, plus live price, liquidity, and volume from DEX data — Base and Ethereum, no API key. Holder count included; identity read…",
+    { address: z.string(), chain: z.string().optional() },
+    async ({ address, chain }) => {
+      try {
+        const res = await api.get("/token/info", { params: params({ address, chain }) });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
+  // 105. Wallet
+  server.tool(
+    "netintel_wallet_balance",
+    "Native + USDC + custom-token balances for any wallet on Base, Ethereum, or Solana — with USD estimates — straight from public RPCs, no API key. Raw units as decimal strings plus formatted numbers; add up to 10 ERC-20 contracts via tokens=…",
+    { address: z.string(), chain: z.string().optional(), tokens: z.string().optional() },
+    async ({ address, chain, tokens }) => {
+      try {
+        const res = await api.get("/wallet/balance", { params: params({ address, chain, tokens }) });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
+  // 106. Wallet
+  server.tool(
+    "netintel_wallet_intel",
+    "Counterparty due-diligence for any Base or Ethereum wallet — age, funding origin, USDC flow, activity pattern, and risk flags in one scored report. The domain-report of wallets: wallet age, first funder, in/out totals, distinct…",
+    { address: z.string(), chain: z.string().optional() },
+    async ({ address, chain }) => {
+      try {
+        const res = await api.get("/wallet/intel", { params: params({ address, chain }) });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
+  // 107. Iban — the API serves GET and POST for the same handler; one MCP
+  // tool suffices, and POST keeps the quasi-PII IBAN out of query strings.
+  server.tool(
+    "netintel_iban_validate",
+    "Validate any IBAN offline — mod-97 check digits, per-country structure, bank/branch extraction, and pretty formatting for ~80 countries — deterministic, instant, no upstream. A structurally invalid IBAN is a real answer: valid:false +…",
+    { iban: z.string() },
+    async ({ iban }) => {
+      try {
+        const res = await api.post("/iban/validate", { iban });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
+  // 109. Market
+  server.tool(
+    "netintel_market_snapshot",
+    "One-call market briefing for agents — BTC/ETH/SOL spot + 24h moves, major fiat crosses (USD/EUR, USD/GBP, USD/JPY, EUR/GBP), Base and Ethereum gas with USD transfer cost, and the crypto fear/greed index. Four sections fetched concurrently…",
+    { symbols: z.string().optional(), vs: z.string().optional() },
+    async ({ symbols, vs }) => {
+      try {
+        const res = await api.get("/market/snapshot", { params: params({ symbols, vs }) });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
 }
 
 async function main() {
