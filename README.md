@@ -4,6 +4,8 @@ MCP server for NetIntel — 108 network intelligence tools for AI agents.
 DNS, SSL, WHOIS, email security, cloud fingerprinting, OSINT and more.
 Pay-per-call via x402 — the NetIntel API accepts USDC on Base or Solana; this MCP server pays on Base. No API keys needed — just a wallet with USDC.
 
+Also discoverable on Coinbase's [Agentic.Market ↗](https://agentic.market/services/netintel-dev) — browse every endpoint and price on the x402 marketplace.
+
 ## Install
 
 ```bash
