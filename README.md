@@ -1,10 +1,8 @@
 # netintel-mcp
 
-MCP server for NetIntel — 108 network intelligence tools for AI agents.
+MCP server for NetIntel — 109 network intelligence tools for AI agents.
 DNS, SSL, WHOIS, email security, cloud fingerprinting, OSINT and more.
 Pay-per-call via x402 — the NetIntel API accepts USDC on Base or Solana; this MCP server pays on Base. No API keys needed — just a wallet with USDC.
-
-Also discoverable on Coinbase's [Agentic.Market ↗](https://agentic.market/services/netintel-dev) — browse every endpoint and price on the x402 marketplace.
 
 ## Install
 
@@ -33,7 +31,7 @@ Or add manually to your Claude Desktop config:
 
 ## Tools
 
-108 pay-per-call tools across DNS, SSL/TLS, WHOIS & domains, email security, IP intelligence, web & content, OSINT, AI text processing, and bundled reports.
+109 pay-per-call tools across DNS, SSL/TLS, WHOIS & domains, email security, IP intelligence, web & content, OSINT, AI text processing, and bundled reports.
 
 | Tool | Description | Price |
 |------|-------------|-------|
@@ -145,6 +143,7 @@ Or add manually to your Claude Desktop config:
 | netintel_wallet_intel | Counterparty due-diligence for any Base or Ethereum wallet — age… | $0.05 |
 | netintel_iban_validate | Validate any IBAN offline — mod-97 check digits, per-country structure… | $0.005 |
 | netintel_market_snapshot | One-call market briefing for agents — BTC/ETH/SOL spot + 24h moves… | $0.05 |
+| netintel_web_fetch | Fetch any URL and get the raw body back — JSON parsed, everything else… | $0.003 |
 
 ## Payment
 All tools pay automatically via x402 in USDC on Base mainnet.

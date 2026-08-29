@@ -1449,6 +1449,19 @@ function registerTools(server: McpServer, api: AxiosInstance) {
     }
   );
 
+  // 110. Web (POST)
+  server.tool(
+    "netintel_web_fetch",
+    "Fetch any URL and get the raw body back — JSON parsed, everything else as text — from safe server-side egress. For data APIs (ArcGIS, government/open-data portals, blob storage) that /web/extract's markdown conversion mangles. No API key…",
+    { url: z.string(), max_bytes: z.number().optional() },
+    async ({ url, max_bytes }) => {
+      try {
+        const res = await api.post("/web/fetch", { url, max_bytes });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
 }
 
 async function main() {
