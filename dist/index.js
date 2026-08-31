@@ -1131,6 +1131,26 @@ function registerTools(server, api) {
             return err(e);
         }
     });
+    // 111. Weather (POST)
+    server.tool("netintel_weather_current", "Live weather + 3-day forecast for any city or lat/lon worldwide — temperature, feels-like, humidity, wind, precipitation, cloud cover, and a plain-language condition. Give a city name (geocoded for you) or coordinates. No API key, metric…", { city: z.string().optional(), latitude: z.number().optional(), longitude: z.number().optional(), units: z.string().optional() }, async ({ city, latitude, longitude, units }) => {
+        try {
+            const res = await api.post("/weather/current", { city, latitude, longitude, units });
+            return ok(res.data);
+        }
+        catch (e) {
+            return err(e);
+        }
+    });
+    // 112. Weather (POST)
+    server.tool("netintel_weather_forecast", "Multi-day weather forecast for any city or lat/lon worldwide — up to 16 days of daily highs/lows, precipitation & probability, UV, sunrise/sunset, wind, and plain-language conditions, plus optional next-24h hourly. Give a city name…", { city: z.string().optional(), latitude: z.number().optional(), longitude: z.number().optional(), days: z.number().optional(), hourly: z.boolean().optional(), units: z.string().optional() }, async ({ city, latitude, longitude, days, hourly, units }) => {
+        try {
+            const res = await api.post("/weather/forecast", { city, latitude, longitude, days, hourly, units });
+            return ok(res.data);
+        }
+        catch (e) {
+            return err(e);
+        }
+    });
 }
 async function main() {
     const api = await createClient();
