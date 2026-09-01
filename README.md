@@ -1,6 +1,6 @@
 # netintel-mcp
 
-MCP server for NetIntel — 111 network intelligence tools for AI agents.
+MCP server for NetIntel — 113 network intelligence tools for AI agents.
 DNS, SSL, WHOIS, email security, cloud fingerprinting, OSINT and more.
 Pay-per-call via x402 — the NetIntel API accepts USDC on Base or Solana; this MCP server pays on Base. No API keys needed — just a wallet with USDC.
 
@@ -31,7 +31,7 @@ Or add manually to your Claude Desktop config:
 
 ## Tools
 
-111 pay-per-call tools across DNS, SSL/TLS, WHOIS & domains, email security, IP intelligence, web & content, OSINT, AI text processing, and bundled reports.
+113 pay-per-call tools across DNS, SSL/TLS, WHOIS & domains, email security, IP intelligence, web & content, OSINT, AI text processing, and bundled reports.
 
 | Tool | Description | Price |
 |------|-------------|-------|
@@ -146,6 +146,8 @@ Or add manually to your Claude Desktop config:
 | netintel_web_fetch | Fetch any URL and get the raw body back — JSON parsed, everything else… | $0.003 |
 | netintel_weather_current | Live weather + 3-day forecast for any city or lat/lon worldwide —… | $0.002 |
 | netintel_weather_forecast | Multi-day weather forecast for any city or lat/lon worldwide — up to 16… | $0.003 |
+| netintel_prediction_markets | Live prediction-market odds from Polymarket — list the top active… | $0.005 |
+| netintel_prediction_market | Full detail for ONE Polymarket prediction market by id or slug —… | $0.003 |
 
 ## Payment
 All tools pay automatically via x402 in USDC on Base mainnet.

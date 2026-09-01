@@ -1151,6 +1151,26 @@ function registerTools(server, api) {
             return err(e);
         }
     });
+    // 113. Prediction (POST)
+    server.tool("netintel_prediction_markets", "Live prediction-market odds from Polymarket — list the top active markets by volume, or search by keyword. Each result has the question, outcomes with current prices (implied probabilities), 24h/total volume, liquidity, and resolution…", { query: z.string().optional(), limit: z.number().optional(), status: z.string().optional() }, async ({ query, limit, status }) => {
+        try {
+            const res = await api.post("/prediction/markets", { query, limit, status });
+            return ok(res.data);
+        }
+        catch (e) {
+            return err(e);
+        }
+    });
+    // 114. Prediction (POST)
+    server.tool("netintel_prediction_market", "Full detail for ONE Polymarket prediction market by id or slug — question, description, every outcome with its current price (implied probability), volume, liquidity, open/close dates, resolution source, category, and status. No API key…", { id: z.string().optional(), slug: z.string().optional() }, async ({ id, slug }) => {
+        try {
+            const res = await api.post("/prediction/market", { id, slug });
+            return ok(res.data);
+        }
+        catch (e) {
+            return err(e);
+        }
+    });
 }
 async function main() {
     const api = await createClient();
