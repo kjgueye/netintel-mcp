@@ -1514,6 +1514,45 @@ function registerTools(server: McpServer, api: AxiosInstance) {
     }
   );
 
+  // 115. Ssl (POST)
+  server.tool(
+    "netintel_ssl_cert",
+    "Fast SSL/TLS certificate facts for any domain — issuer, subject, SANs, valid from/to, days until expiry, expired/self-signed flags, TLS version, chain length. One TLS handshake, sub-2-second answer. The light, cheap tier under /ssl/analyze…",
+    { domain: z.string(), port: z.number().optional() },
+    async ({ domain, port }) => {
+      try {
+        const res = await api.post("/ssl/cert", { domain, port });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
+  // 116. Text (POST)
+  server.tool(
+    "netintel_text_chunk",
+    "Split text into overlapping chunks for RAG ingestion — by characters or words, with configurable chunk size and overlap. Deterministic (same input → same chunks), returns each chunk with its index and start/end offsets. No API key, no LLM…",
+    { text: z.string(), chunk_size: z.number().optional(), overlap: z.number().optional(), unit: z.string().optional() },
+    async ({ text, chunk_size, overlap, unit }) => {
+      try {
+        const res = await api.post("/text/chunk", { text, chunk_size, overlap, unit });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
+  // 117. Text (POST)
+  server.tool(
+    "netintel_text_stats",
+    "Instant text statistics — characters (with/without spaces), words, unique words, sentences, paragraphs, average word/sentence length, longest word, reading and speaking time. Deterministic, no LLM, no API key. For agents sizing content…",
+    { text: z.string() },
+    async ({ text }) => {
+      try {
+        const res = await api.post("/text/stats", { text });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
 }
 
 async function main() {

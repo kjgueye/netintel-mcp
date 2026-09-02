@@ -1,6 +1,6 @@
 # netintel-mcp
 
-MCP server for NetIntel — 113 network intelligence tools for AI agents.
+MCP server for NetIntel — 116 network intelligence tools for AI agents.
 DNS, SSL, WHOIS, email security, cloud fingerprinting, OSINT and more.
 Pay-per-call via x402 — the NetIntel API accepts USDC on Base or Solana; this MCP server pays on Base. No API keys needed — just a wallet with USDC.
 
@@ -31,12 +31,12 @@ Or add manually to your Claude Desktop config:
 
 ## Tools
 
-113 pay-per-call tools across DNS, SSL/TLS, WHOIS & domains, email security, IP intelligence, web & content, OSINT, AI text processing, and bundled reports.
+116 pay-per-call tools across DNS, SSL/TLS, WHOIS & domains, email security, IP intelligence, web & content, OSINT, AI text processing, and bundled reports.
 
 | Tool | Description | Price |
 |------|-------------|-------|
 | netintel_dns_lookup | DNS lookup / nslookup / dig API — resolve the common DNS record types… | $0.002 |
-| netintel_ssl_analyze | Performs a TLS handshake to inspect the certificate chain, probes… | $0.03 |
+| netintel_ssl_analyze | Performs a TLS handshake to inspect the certificate chain, probes… | $0.007 |
 | netintel_redirect_trace | Follows a URL through its full redirect chain (up to 20 hops)… | $0.01 |
 | netintel_security_headers | Fetches a URL and evaluates 10 security-critical response headers (CSP… | $0.01 |
 | netintel_email_auth | Email deliverability & domain security check — validates SPF, DKIM… | $0.002 |
@@ -131,10 +131,10 @@ Or add manually to your Claude Desktop config:
 | netintel_openai_gpt_5_6_luna | Call OpenAI's gpt-5.6-luna via a single pay-per-call x402 endpoint — no… | $0.06 |
 | netintel_v1_embeddings | OpenAI-compatible text embeddings API — standard /v1/embeddings request… | $0.005 |
 | netintel_semantic_rank | Semantic similarity ranking — send a query plus up to 100 candidate… | $0.02 |
-| netintel_v1_chat_completions | OpenAI-compatible chat completions gateway — standard… | $0.10 |
+| netintel_v1_chat_completions | OpenAI-compatible chat completions gateway — standard… | $0.005 |
 | netintel_crypto_market | Structured live crypto market data for ~50 top assets in one JSON call:… | $0.005 |
 | netintel_gas_price | Live gas prices across Base, Ethereum, Arbitrum, Optimism, and Polygon… | $0.005 |
-| netintel_crypto_price | Spot prices for up to 25 crypto assets in one call — USD, EUR, or GBP —… | $0.01 |
+| netintel_crypto_price | Spot prices for up to 25 crypto assets in one call — USD, EUR, or GBP —… | $0.005 |
 | netintel_crypto_ohlc | Historical OHLC candles for any major crypto asset — hourly or daily… | $0.02 |
 | netintel_currency_exchange_batch | Convert one base currency to up to 30 targets in a single call — fiat… | $0.02 |
 | netintel_currency_exchange_history | Daily historical exchange-rate series for any currency pair — fiat via… | $0.02 |
@@ -148,6 +148,9 @@ Or add manually to your Claude Desktop config:
 | netintel_weather_forecast | Multi-day weather forecast for any city or lat/lon worldwide — up to 16… | $0.003 |
 | netintel_prediction_markets | Live prediction-market odds from Polymarket — list the top active… | $0.005 |
 | netintel_prediction_market | Full detail for ONE Polymarket prediction market by id or slug —… | $0.003 |
+| netintel_ssl_cert | Fast SSL/TLS certificate facts for any domain — issuer, subject, SANs… | $0.003 |
+| netintel_text_chunk | Split text into overlapping chunks for RAG ingestion — by characters or… | $0.001 |
+| netintel_text_stats | Instant text statistics — characters (with/without spaces), words… | $0.001 |
 
 ## Payment
 All tools pay automatically via x402 in USDC on Base mainnet.
