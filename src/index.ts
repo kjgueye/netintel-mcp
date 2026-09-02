@@ -1553,6 +1553,19 @@ function registerTools(server: McpServer, api: AxiosInstance) {
     }
   );
 
+  // 118. Embeddings (POST)
+  server.tool(
+    "netintel_embeddings",
+    "Multilingual text embeddings (384-dim) served in-house, no OpenAI dependency, no API key. NetIntel's cheapest embeddings at $0.001/call, batches up to 256 texts. Supports query/passage input types for retrieval (e5). Pairs with /text/chunk…",
+    { input: z.string(), input_type: z.string().optional(), encoding_format: z.string().optional() },
+    async ({ input, input_type, encoding_format }) => {
+      try {
+        const res = await api.post("/embeddings", { input, input_type, encoding_format });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
 }
 
 async function main() {
