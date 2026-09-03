@@ -41,7 +41,7 @@ Or add manually to your Claude Desktop config:
 | netintel_security_headers | Fetches a URL and evaluates 10 security-critical response headers (CSP… | $0.01 |
 | netintel_email_auth | Email deliverability & domain security check — validates SPF, DKIM… | $0.002 |
 | netintel_cloud_fingerprint | Fingerprints a domain's cloud infrastructure by probing DNS records… | $0.01 |
-| netintel_schema_parse | Extract structured data from any unstructured text into your own JSON… | $0.10 |
+| netintel_schema_parse | Extract structured data from any unstructured text into your own JSON… | $0.01 |
 | netintel_asn_lookup | Resolves an IP address or domain to its Autonomous System Number (ASN)… | $0.03 |
 | netintel_whois_lookup | WHOIS domain lookup via RDAP — registrar, creation/expiry/updated… | $0.003 |
 | netintel_cert_transparency | Query the crt.sh certificate transparency log database to enumerate all… | $0.01 |
@@ -51,7 +51,7 @@ Or add manually to your Claude Desktop config:
 | netintel_ip_blacklist | Check an IP address against 15 major DNS blacklists (Spamhaus… | $0.05 |
 | netintel_tech_fingerprint | Fetch a URL and detect the full technology stack from HTTP response… | $0.05 |
 | netintel_breach_check | Check if a password has appeared in known data breaches using the… | $0.01 |
-| netintel_domain_availability | Check if a domain name is available for registration by querying RDAP… | $0.05 |
+| netintel_domain_availability | Check if a domain name is available for registration by querying RDAP… | $0.01 |
 | netintel_email_intel | Email verification & deliverability check (email validator / verifier)… | $0.005 |
 | netintel_og_scraper | Fetch any public URL and extract structured metadata — Open Graph tags… | $0.01 |
 | netintel_page_extract | Fetch any article or web page and extract clean readable text stripped… | $0.05 |
@@ -70,7 +70,7 @@ Or add manually to your Claude Desktop config:
 | netintel_lang_detect | Detect the language of any text input using stopword-set matching and… | $0.005 |
 | netintel_npm_intel | Fetch metadata for any npm package — download counts, latest version… | $0.01 |
 | netintel_sitemap_parser | Fetch and parse any XML sitemap or sitemap index file — returns URLs… | $0.01 |
-| netintel_url_safety | Check a URL against URLhaus malware database and heuristic phishing… | $0.05 |
+| netintel_url_safety | Check a URL against URLhaus malware database and heuristic phishing… | $0.01 |
 | netintel_domain_age | Determine a domain's age from registration data and archival history —… | $0.03 |
 | netintel_bulk_domain | Check availability of many domain names across multiple TLDs in a… | $0.10 |
 | netintel_domain_appraise | Estimate the market value tier of a domain name using transparent… | $0.03 |
@@ -80,22 +80,22 @@ Or add manually to your Claude Desktop config:
 | netintel_tld_price | Reference registration/renewal/transfer pricing from a curated table of… | $0.01 |
 | netintel_typosquat | Generate common typo and look-alike variations of a domain and check… | $0.05 |
 | netintel_classify | Text classification API — zero-shot text classifier / categorization:… | $0.005 |
-| netintel_content_moderate | Moderate text content using Claude Haiku — flags categories like… | $0.05 |
+| netintel_content_moderate | Moderate text content using Claude Haiku — flags categories like… | $0.005 |
 | netintel_entity_extract | Extract named entities from text using Claude Haiku — people… | $0.05 |
 | netintel_sentiment | Sentiment analysis API — analyze sentiment of text and get a text… | $0.002 |
 | netintel_text_summarize | Text summarizer / summarization API — condense text, Markdown, or a URL… | $0.005 |
-| netintel_translate | Translate up to 2000 words between languages using Claude Haiku —… | $0.08 |
-| netintel_translate_short | Translate text between languages — text translation API for short… | $0.03 |
+| netintel_translate | Translate up to 2000 words between languages using Claude Haiku —… | $0.02 |
+| netintel_translate_short | Translate text between languages — text translation API for short… | $0.01 |
 | netintel_domain_due_diligence | One call combines domain availability, heuristic value appraisal, and… | $0.20 |
 | netintel_domain_report_full | One premium call returns a complete six-part domain profile — DNS… | $0.25 |
 | netintel_email_report | One call combines domain email authentication (SPF/DKIM/DMARC)… | $0.15 |
 | netintel_ip_report | One premium call returns a complete five-part IP profile — geolocation… | $0.20 |
 | netintel_url_safety_full | One call vets a URL end to end — traces its full redirect chain, checks… | $0.15 |
-| netintel_extract | Parse and normalize a freeform address string using Claude Haiku —… | $0.03 |
-| netintel_extract_contact | Extract structured contact details from text, an email signature, or… | $0.05 |
-| netintel_extract_invoice | Extract structured data from invoice or receipt text — or directly from… | $0.10 |
-| netintel_extract_resume | Extract structured data from resume/CV text using Claude Haiku —… | $0.08 |
-| netintel_extract_table | Extract tabular data from messy text or HTML using Claude Haiku —… | $0.05 |
+| netintel_extract | Parse and normalize a freeform address string using Claude Haiku —… | $0.01 |
+| netintel_extract_contact | Extract structured contact details from text, an email signature, or… | $0.01 |
+| netintel_extract_invoice | Extract structured data from invoice or receipt text — or directly from… | $0.02 |
+| netintel_extract_resume | Extract structured data from resume/CV text using Claude Haiku —… | $0.02 |
+| netintel_extract_table | Extract tabular data from messy text or HTML using Claude Haiku —… | $0.02 |
 | netintel_markdown | Convert messy HTML or text into clean, well-structured Markdown using… | $0.03 |
 | netintel_normalize | Conform messy or inconsistent JSON to a target schema using Claude… | $0.05 |
 | netintel_text_to_json | Turn unstructured text into structured JSON matching a caller-supplied… | $0.05 |
@@ -108,7 +108,7 @@ Or add manually to your Claude Desktop config:
 | netintel_ai_image | Generate agent-ready image assets (icons, logos, social graphics… | $0.25 |
 | netintel_convert | Convert any physical measurement — length, mass, volume, temperature… | $0.01 |
 | netintel_domain | Composite 0-100 trust/risk score for a domain in one call — blends… | $0.10 |
-| netintel_translate_structured | Translate structured content — JSON, HTML, Markdown, templates, UI… | $0.05 |
+| netintel_translate_structured | Translate structured content — JSON, HTML, Markdown, templates, UI… | $0.02 |
 | netintel_translate_batch | Translate many independent strings in one request — each with a caller… | $0.05 |
 | netintel_json | Repair malformed JSON into valid JSON — fixes code fences, trailing… | $0.02 |
 | netintel_schema | Validate data against a supplied schema — checks required fields… | $0.02 |
@@ -133,7 +133,7 @@ Or add manually to your Claude Desktop config:
 | netintel_semantic_rank | Semantic similarity ranking — send a query plus up to 100 candidate… | $0.02 |
 | netintel_v1_chat_completions | OpenAI-compatible chat completions gateway — standard… | $0.005 |
 | netintel_crypto_market | Structured live crypto market data for ~50 top assets in one JSON call:… | $0.005 |
-| netintel_gas_price | Live gas prices across Base, Ethereum, Arbitrum, Optimism, and Polygon… | $0.005 |
+| netintel_gas_price | Live gas prices across Base, Ethereum, Arbitrum, Optimism, and Polygon… | $0.002 |
 | netintel_crypto_price | Spot prices for up to 25 crypto assets in one call — USD, EUR, or GBP —… | $0.005 |
 | netintel_crypto_ohlc | Historical OHLC candles for any major crypto asset — hourly or daily… | $0.02 |
 | netintel_currency_exchange_batch | Convert one base currency to up to 30 targets in a single call — fiat… | $0.02 |
