@@ -1211,6 +1211,56 @@ function registerTools(server, api) {
             return err(e);
         }
     });
+    // 119. Email (POST)
+    server.tool("netintel_email_verify", "Verify an email address before you send: syntax + MX + disposable/role/free-provider detection in one call, boolean-first (deliverable, safe_to_send) with a machine-readable reason. DNS-level check only — does not confirm the individual…", { email: z.string() }, async ({ email }) => {
+        try {
+            const res = await api.post("/email/verify", { email });
+            return ok(res.data);
+        }
+        catch (e) {
+            return err(e);
+        }
+    });
+    // 120. Exa (POST)
+    server.tool("netintel_exa_search", "exaSearchRouteConfig.description", { query: z.string(), num_results: z.number().optional(), type: z.string().optional(), category: z.string().optional(), include_domains: z.array(z.string()).optional(), start_published_date: z.string().optional(), end_published_date: z.string().optional(), snippets: z.string().optional() }, async ({ query, num_results, type, category, include_domains, start_published_date, end_published_date, snippets }) => {
+        try {
+            const res = await api.post("/exa/search", { query, num_results, type, category, include_domains, start_published_date, end_published_date, snippets });
+            return ok(res.data);
+        }
+        catch (e) {
+            return err(e);
+        }
+    });
+    // 121. Web (POST)
+    server.tool("netintel_web_search", "webSearchRouteConfig.description", { query: z.string(), num_results: z.number().optional(), type: z.string().optional(), category: z.string().optional(), include_domains: z.array(z.string()).optional(), start_published_date: z.string().optional(), end_published_date: z.string().optional(), snippets: z.string().optional() }, async ({ query, num_results, type, category, include_domains, start_published_date, end_published_date, snippets }) => {
+        try {
+            const res = await api.post("/web/search", { query, num_results, type, category, include_domains, start_published_date, end_published_date, snippets });
+            return ok(res.data);
+        }
+        catch (e) {
+            return err(e);
+        }
+    });
+    // 122. Exa (POST)
+    server.tool("netintel_exa_contents", "Clean page text for up to 3 URLs in one call via Exa's index + live crawl — works on JS-rendered and bot-walled pages that direct fetch can't read. Returns title, author, published_date and text per URL, with per-URL status. Pairs with…", { urls: z.array(z.string()), max_characters: z.number().optional(), livecrawl: z.string().optional() }, async ({ urls, max_characters, livecrawl }) => {
+        try {
+            const res = await api.post("/exa/contents", { urls, max_characters, livecrawl });
+            return ok(res.data);
+        }
+        catch (e) {
+            return err(e);
+        }
+    });
+    // 123. Exa (POST)
+    server.tool("netintel_exa_answer", "Ask a question, get a direct answer grounded in a live web search, with numbered citations (title, url, published_date). One call replaces search + read + summarize. For ranked results instead of a synthesized answer use /exa/search…", { query: z.string(), include_citation_text: z.boolean().optional() }, async ({ query, include_citation_text }) => {
+        try {
+            const res = await api.post("/exa/answer", { query, include_citation_text });
+            return ok(res.data);
+        }
+        catch (e) {
+            return err(e);
+        }
+    });
 }
 async function main() {
     const api = await createClient();

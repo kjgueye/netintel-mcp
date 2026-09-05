@@ -1,6 +1,6 @@
 # netintel-mcp
 
-MCP server for NetIntel — 117 network intelligence tools for AI agents.
+MCP server for NetIntel — 122 network intelligence tools for AI agents.
 DNS, SSL, WHOIS, email security, cloud fingerprinting, OSINT and more.
 Pay-per-call via x402 — the NetIntel API accepts USDC on Base or Solana; this MCP server pays on Base. No API keys needed — just a wallet with USDC.
 
@@ -31,7 +31,7 @@ Or add manually to your Claude Desktop config:
 
 ## Tools
 
-117 pay-per-call tools across DNS, SSL/TLS, WHOIS & domains, email security, IP intelligence, web & content, OSINT, AI text processing, and bundled reports.
+122 pay-per-call tools across DNS, SSL/TLS, WHOIS & domains, email security, IP intelligence, web & content, OSINT, AI text processing, and bundled reports.
 
 | Tool | Description | Price |
 |------|-------------|-------|
@@ -152,6 +152,11 @@ Or add manually to your Claude Desktop config:
 | netintel_text_chunk | Split text into overlapping chunks for RAG ingestion — by characters or… | $0.001 |
 | netintel_text_stats | Instant text statistics — characters (with/without spaces), words… | $0.001 |
 | netintel_embeddings | Multilingual text embeddings (384-dim) served in-house, no OpenAI… | $0.001 |
+| netintel_email_verify | Verify an email address before you send: syntax + MX +… | $0.001 |
+| netintel_exa_search | exaSearchRouteConfig.description | $0.01 |
+| netintel_web_search | webSearchRouteConfig.description | $0.01 |
+| netintel_exa_contents | Clean page text for up to 3 URLs in one call via Exa's index + live… | $0.005 |
+| netintel_exa_answer | Ask a question, get a direct answer grounded in a live web search, with… | $0.01 |
 
 ## Payment
 All tools pay automatically via x402 in USDC on Base mainnet.
