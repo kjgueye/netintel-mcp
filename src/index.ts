@@ -97,7 +97,7 @@ function registerTools(server: McpServer, api: AxiosInstance) {
   // 6. Cloud Fingerprint
   server.tool(
     "netintel_cloud_fingerprint",
-    "Detect CDN, WAF, hosting provider, DNS provider, and email provider for a domain with confidence scores and an infrastructure security grade.",
+    "Detect CDN, WAF, hosting, DNS and email provider for a domain, plus TLS certificate issuer, wildcard coverage and SAN count, with confidence scores and an infrastructure security grade. Hosts that resolve but serve nothing on 80/443 return http_reachable:false and grade insufficient_data rather than a low grade.",
     { domain: z.string() },
     async ({ domain }) => {
       try {
@@ -1295,11 +1295,11 @@ function registerTools(server: McpServer, api: AxiosInstance) {
   // 97. V1 (POST)
   server.tool(
     "netintel_v1_chat_completions",
-    "OpenAI-compatible chat completions gateway — standard /v1/chat/completions path and request shape, model chosen in the body (gpt-4o, gpt-4.1, gpt-5.6-luna, minis, nanos). Flat $0.10 per call in USDC via x402, no OpenAI account or API key…",
-    { model: z.string(), messages: z.array(z.any()), max_tokens: z.number().optional() },
-    async ({ model, messages, max_tokens }) => {
+    "OpenAI-compatible chat completions gateway (POST /v1/chat/completions request/response shape). Models: gpt-4.1-mini, gpt-5.4-nano, gpt-4o-mini, gpt-4.1-nano, gpt-5-nano. Flat $0.005 per call in USDC via x402, no OpenAI account or API key. Supports response_format {type:\"json_object\"} (JSON mode).",
+    { model: z.string(), messages: z.array(z.any()), max_tokens: z.number().optional(), response_format: z.object({ type: z.enum(["json_object", "text"]) }).optional() },
+    async ({ model, messages, max_tokens, response_format }) => {
       try {
-        const res = await api.post("/v1/chat/completions", { model, messages, max_tokens });
+        const res = await api.post("/v1/chat/completions", { model, messages, max_tokens, response_format });
         return ok(res.data);
       } catch (e) { return err(e); }
     }
@@ -1582,7 +1582,7 @@ function registerTools(server: McpServer, api: AxiosInstance) {
   // 120. Exa (POST)
   server.tool(
     "netintel_exa_search",
-    "exaSearchRouteConfig.description",
+    "Exa neural web search for AI agents — POST or GET a query, get ranked live results (title, url, published_date, author, score) with optional highlight snippets. Filter by category (news, research paper, github, company, pdf…), domain…",
     { query: z.string(), num_results: z.number().optional(), type: z.string().optional(), category: z.string().optional(), include_domains: z.array(z.string()).optional(), start_published_date: z.string().optional(), end_published_date: z.string().optional(), snippets: z.string().optional() },
     async ({ query, num_results, type, category, include_domains, start_published_date, end_published_date, snippets }) => {
       try {
@@ -1595,7 +1595,7 @@ function registerTools(server: McpServer, api: AxiosInstance) {
   // 121. Web (POST)
   server.tool(
     "netintel_web_search",
-    "webSearchRouteConfig.description",
+    "Web search for AI agents — one query in, ranked live results out (title, url, published_date, author, score, optional snippets). Neural + keyword modes, category/domain/date filters. For a direct answer use /exa/answer. Keyless x402, pay…",
     { query: z.string(), num_results: z.number().optional(), type: z.string().optional(), category: z.string().optional(), include_domains: z.array(z.string()).optional(), start_published_date: z.string().optional(), end_published_date: z.string().optional(), snippets: z.string().optional() },
     async ({ query, num_results, type, category, include_domains, start_published_date, end_published_date, snippets }) => {
       try {

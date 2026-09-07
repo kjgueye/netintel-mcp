@@ -40,7 +40,7 @@ Or add manually to your Claude Desktop config:
 | netintel_redirect_trace | Follows a URL through its full redirect chain (up to 20 hops)… | $0.01 |
 | netintel_security_headers | Fetches a URL and evaluates 10 security-critical response headers (CSP… | $0.01 |
 | netintel_email_auth | Email deliverability & domain security check — validates SPF, DKIM… | $0.002 |
-| netintel_cloud_fingerprint | Fingerprints a domain's cloud infrastructure by probing DNS records… | $0.01 |
+| netintel_cloud_fingerprint | Fingerprints a domain's cloud infrastructure — DNS records, HTTP… | $0.01 |
 | netintel_schema_parse | Extract structured data from any unstructured text into your own JSON… | $0.01 |
 | netintel_asn_lookup | Resolves an IP address or domain to its Autonomous System Number (ASN)… | $0.03 |
 | netintel_whois_lookup | WHOIS domain lookup via RDAP — registrar, creation/expiry/updated… | $0.003 |
@@ -153,8 +153,8 @@ Or add manually to your Claude Desktop config:
 | netintel_text_stats | Instant text statistics — characters (with/without spaces), words… | $0.001 |
 | netintel_embeddings | Multilingual text embeddings (384-dim) served in-house, no OpenAI… | $0.001 |
 | netintel_email_verify | Verify an email address before you send: syntax + MX +… | $0.001 |
-| netintel_exa_search | exaSearchRouteConfig.description | $0.01 |
-| netintel_web_search | webSearchRouteConfig.description | $0.01 |
+| netintel_exa_search | Exa neural web search for AI agents — POST or GET a query, get ranked… | $0.01 |
+| netintel_web_search | Web search for AI agents — one query in, ranked live results out… | $0.01 |
 | netintel_exa_contents | Clean page text for up to 3 URLs in one call via Exa's index + live… | $0.005 |
 | netintel_exa_answer | Ask a question, get a direct answer grounded in a live web search, with… | $0.01 |
 
