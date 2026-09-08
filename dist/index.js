@@ -831,7 +831,7 @@ function registerTools(server, api) {
         }
     });
     // 80. Openai (POST)
-    server.tool("netintel_openai", "Call OpenAI's gpt-4o via a single pay-per-call x402 endpoint — no OpenAI account or API key needed, pay $0.10 per request in USDC. Standard OpenAI chat.completions request/response shape, capped input and output. Search terms: OpenAI…", { messages: z.array(z.any()), max_tokens: z.number().optional(), temperature: z.number().optional(), top_p: z.number().optional() }, async ({ messages, max_tokens, temperature, top_p }) => {
+    server.tool("netintel_openai", "Call OpenAI's gpt-4o via a single pay-per-call x402 endpoint — no OpenAI account or API key needed, pay $0.10 per request in USDC. Vision: messages may carry up to 4 https image_url parts per call (detail low/high/auto). Every call is bounded by a 16000-token combined input budget plus a 48000-char cap; output capped at 2048…", { messages: z.array(z.any()), max_tokens: z.number().optional(), temperature: z.number().optional(), top_p: z.number().optional() }, async ({ messages, max_tokens, temperature, top_p }) => {
         try {
             const res = await api.post("/openai/gpt-4o", { messages, max_tokens, temperature, top_p });
             return ok(res.data);
