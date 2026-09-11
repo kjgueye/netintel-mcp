@@ -1100,7 +1100,7 @@ function registerTools(server: McpServer, api: AxiosInstance) {
   // 82. Openai (POST)
   server.tool(
     "netintel_openai_gpt_4_1_mini",
-    "Call OpenAI's gpt-4.1-mini via a single pay-per-call x402 endpoint — no OpenAI account or API key needed, pay $0.02 per request in USDC. Standard OpenAI chat.completions request/response shape, capped input and output. Search terms:…",
+    "Call OpenAI's gpt-4.1-mini via a single pay-per-call x402 endpoint — no OpenAI account or API key needed, pay $0.005 per request in USDC. Standard OpenAI chat.completions request/response shape, capped input and output. Search terms:…",
     { messages: z.array(z.any()), max_tokens: z.number().optional(), temperature: z.number().optional(), top_p: z.number().optional() },
     async ({ messages, max_tokens, temperature, top_p }) => {
       try {
@@ -1113,7 +1113,7 @@ function registerTools(server: McpServer, api: AxiosInstance) {
   // 83. Openai (POST)
   server.tool(
     "netintel_openai_gpt_4o_mini",
-    "Call OpenAI's gpt-4o-mini via a single pay-per-call x402 endpoint — no OpenAI account or API key needed, pay $0.01 per request in USDC. Standard OpenAI chat.completions request/response shape, capped input and output. Search terms: OpenAI…",
+    "Call OpenAI's gpt-4o-mini via a single pay-per-call x402 endpoint — no OpenAI account or API key needed, pay $0.005 per request in USDC. Standard OpenAI chat.completions request/response shape, capped input and output. Search terms: OpenAI…",
     { messages: z.array(z.any()), max_tokens: z.number().optional(), temperature: z.number().optional(), top_p: z.number().optional() },
     async ({ messages, max_tokens, temperature, top_p }) => {
       try {
@@ -1126,7 +1126,7 @@ function registerTools(server: McpServer, api: AxiosInstance) {
   // 84. Openai (POST)
   server.tool(
     "netintel_openai_gpt_4_1_nano",
-    "Call OpenAI's gpt-4.1-nano via a single pay-per-call x402 endpoint — no OpenAI account or API key needed, pay $0.01 per request in USDC. Standard OpenAI chat.completions request/response shape, capped input and output. Search terms:…",
+    "Call OpenAI's gpt-4.1-nano via a single pay-per-call x402 endpoint — no OpenAI account or API key needed, pay $0.005 per request in USDC. Standard OpenAI chat.completions request/response shape, capped input and output. Search terms:…",
     { messages: z.array(z.any()), max_tokens: z.number().optional(), temperature: z.number().optional(), top_p: z.number().optional() },
     async ({ messages, max_tokens, temperature, top_p }) => {
       try {
@@ -1178,7 +1178,7 @@ function registerTools(server: McpServer, api: AxiosInstance) {
   // 88. Openai (POST)
   server.tool(
     "netintel_openai_gpt_5_4_nano",
-    "Call OpenAI's gpt-5.4-nano via a single pay-per-call x402 endpoint — no OpenAI account or API key needed, pay $0.01 per request in USDC. Standard OpenAI chat.completions request/response shape, capped input and output. Search terms:…",
+    "Call OpenAI's gpt-5.4-nano via a single pay-per-call x402 endpoint — no OpenAI account or API key needed, pay $0.005 per request in USDC. Standard OpenAI chat.completions request/response shape, capped input and output. Search terms:…",
     { messages: z.array(z.any()), max_completion_tokens: z.number().optional() },
     async ({ messages, max_completion_tokens }) => {
       try {
@@ -1204,7 +1204,7 @@ function registerTools(server: McpServer, api: AxiosInstance) {
   // 90. Openai (POST)
   server.tool(
     "netintel_openai_gpt_5_nano",
-    "Call OpenAI's gpt-5-nano via a single pay-per-call x402 endpoint — no OpenAI account or API key needed, pay $0.01 per request in USDC. Standard OpenAI chat.completions request/response shape, capped input and output. Search terms: OpenAI…",
+    "Call OpenAI's gpt-5-nano via a single pay-per-call x402 endpoint — no OpenAI account or API key needed, pay $0.005 per request in USDC. Standard OpenAI chat.completions request/response shape, capped input and output. Search terms: OpenAI…",
     { messages: z.array(z.any()), max_completion_tokens: z.number().optional() },
     async ({ messages, max_completion_tokens }) => {
       try {
