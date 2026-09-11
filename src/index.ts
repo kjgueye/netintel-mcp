@@ -1295,7 +1295,7 @@ function registerTools(server: McpServer, api: AxiosInstance) {
   // 97. V1 (POST)
   server.tool(
     "netintel_v1_chat_completions",
-    "OpenAI-compatible chat completions gateway (POST /v1/chat/completions request/response shape). The model in the body sets the price: POST unpaid and the 402 challenge quotes that model's exact price in USDC via x402 — no OpenAI account or API key. This client pays whatever is quoted. GET /v1/models (free) lists every model with its price and dedicated endpoint. Supports response_format {type:\"json_object\"}.",
+    "OpenAI-compatible chat completions gateway (POST /v1/chat/completions shape). The model in the body sets the price: POST unpaid and the 402 quotes that model's exact price in USDC via x402 — no OpenAI account or API key. A model the gateway does not serve returns a 400 naming its dedicated endpoint; where per-model pricing is on it serves those too, each at its configured price. This client pays accepted challenges automatically — this text is not a spending cap. GET /v1/models (free) is the live catalogue. Supports response_format {type:\"json_object\"}.",
     { model: z.string(), messages: z.array(z.any()), max_tokens: z.number().optional(), response_format: z.object({ type: z.enum(["json_object", "text"]) }).optional() },
     async ({ model, messages, max_tokens, response_format }) => {
       try {
