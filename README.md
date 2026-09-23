@@ -35,7 +35,7 @@ Or add manually to your Claude Desktop config:
 
 | Tool | Description | Price |
 |------|-------------|-------|
-| netintel_dns_lookup | DNS lookup / nslookup / dig API — resolve the common DNS record types… | $0.002 |
+| netintel_dns_lookup | DNS lookup for any domain — resolve A, AAAA, MX, TXT, NS, CNAME, SOA… | $0.002 |
 | netintel_ssl_analyze | Performs a TLS handshake to inspect the certificate chain, probes… | $0.007 |
 | netintel_redirect_trace | Follows a URL through its full redirect chain (up to 20 hops)… | $0.01 |
 | netintel_security_headers | Fetches a URL and evaluates 10 security-critical response headers (CSP… | $0.01 |
@@ -43,7 +43,7 @@ Or add manually to your Claude Desktop config:
 | netintel_cloud_fingerprint | Fingerprints a domain's cloud infrastructure — DNS records, HTTP… | $0.01 |
 | netintel_schema_parse | Extract structured data from any unstructured text into your own JSON… | $0.01 |
 | netintel_asn_lookup | Resolves an IP address or domain to its Autonomous System Number (ASN)… | $0.03 |
-| netintel_whois_lookup | WHOIS domain lookup via RDAP — registrar, creation/expiry/updated… | $0.003 |
+| netintel_whois_lookup | Domain registration lookup, WHOIS via RDAP — registrar, registration… | $0.003 |
 | netintel_cert_transparency | Query the crt.sh certificate transparency log database to enumerate all… | $0.01 |
 | netintel_subnet_calc | Calculates IPv4/IPv6 subnet details from CIDR notation —… | $0.005 |
 | netintel_dns_propagation | Query a domain's DNS record across 10 geographically distributed public… | $0.03 |
@@ -60,7 +60,7 @@ Or add manually to your Claude Desktop config:
 | netintel_rss_parser | Fetch and parse any RSS 2.0 or Atom feed URL and return structured… | $0.01 |
 | netintel_username_check | Check username availability across 20+ social platforms and developer… | $0.03 |
 | netintel_wayback_lookup | Query the Internet Archive Wayback Machine to check if a URL has ever… | $0.01 |
-| netintel_ip_reputation | Check an IP address against AbuseIPDB and AlienVault OTX threat feeds… | $0.05 |
+| netintel_ip_reputation | IP reputation and malicious-IP check — screens an address against… | $0.05 |
 | netintel_cron_parser | Parse any cron expression into a human-readable explanation, validate… | $0.03 |
 | netintel_currency_exchange | Convert any amount between 32 fiat currencies (live European Central… | $0.01 |
 | netintel_github_intel | Fetch public metadata for any GitHub repository — stars, forks, open… | $0.03 |
@@ -79,7 +79,7 @@ Or add manually to your Claude Desktop config:
 | netintel_name_gen | Generate brandable startup/product names from a keyword using prefixes… | $0.05 |
 | netintel_tld_price | Reference registration/renewal/transfer pricing from a curated table of… | $0.01 |
 | netintel_typosquat | Generate common typo and look-alike variations of a domain and check… | $0.05 |
-| netintel_classify | Text classification API — zero-shot text classifier / categorization:… | $0.005 |
+| netintel_classify | Classify text into your own categories — zero-shot: supply 2–20 labels… | $0.005 |
 | netintel_content_moderate | Moderate text content using Claude Haiku — flags categories like… | $0.005 |
 | netintel_entity_extract | Extract named entities from text using Claude Haiku — people… | $0.05 |
 | netintel_sentiment | Sentiment analysis API — analyze sentiment of text and get a text… | $0.002 |
@@ -99,7 +99,7 @@ Or add manually to your Claude Desktop config:
 | netintel_markdown | Convert messy HTML or text into clean, well-structured Markdown using… | $0.03 |
 | netintel_normalize | Conform messy or inconsistent JSON to a target schema using Claude… | $0.05 |
 | netintel_text_to_json | Turn unstructured text into structured JSON matching a caller-supplied… | $0.05 |
-| netintel_web | Extract article / main content from any URL or PDF to clean, LLM-ready… | $0.003 |
+| netintel_web | Extract text from a web page or PDF as clean Markdown — HTML to… | $0.003 |
 | netintel_money | Normalize any messy money string into a typed decimal amount plus ISO… | $0.01 |
 | netintel_calendar | Turn event fields into a valid RFC 5545 .ics calendar file — handles… | $0.005 |
 | netintel_event_classify | Cheap, fast "is this a dateable event?" filter for social and web text… | $0.02 |
@@ -134,7 +134,7 @@ Or add manually to your Claude Desktop config:
 | netintel_v1_chat_completions | OpenAI-compatible chat completions gateway — standard… | $0.005 |
 | netintel_crypto_market | Structured live crypto market data for ~50 top assets in one JSON call:… | $0.005 |
 | netintel_gas_price | Live gas prices across Base, Ethereum, Arbitrum, Optimism, and Polygon… | $0.002 |
-| netintel_crypto_price | Spot prices for up to 25 crypto assets in one call — USD, EUR, or GBP —… | $0.005 |
+| netintel_crypto_price | Crypto prices for up to 25 coins in one call — live cryptocurrency spot… | $0.005 |
 | netintel_crypto_ohlc | Historical OHLC candles for any major crypto asset — hourly or daily… | $0.02 |
 | netintel_currency_exchange_batch | Convert one base currency to up to 30 targets in a single call — fiat… | $0.02 |
 | netintel_currency_exchange_history | Daily historical exchange-rate series for any currency pair — fiat via… | $0.02 |
@@ -148,11 +148,11 @@ Or add manually to your Claude Desktop config:
 | netintel_weather_forecast | Multi-day weather forecast for any city or lat/lon worldwide — up to 16… | $0.003 |
 | netintel_prediction_markets | Live prediction-market odds from Polymarket — list the top active… | $0.005 |
 | netintel_prediction_market | Full detail for ONE Polymarket prediction market by id or slug —… | $0.003 |
-| netintel_ssl_cert | Fast SSL/TLS certificate facts for any domain — issuer, subject, SANs… | $0.003 |
+| netintel_ssl_cert | SSL certificate check for any domain — issuer, subject, SANs, valid… | $0.003 |
 | netintel_text_chunk | Split text into overlapping chunks for RAG ingestion — by characters or… | $0.001 |
 | netintel_text_stats | Instant text statistics — characters (with/without spaces), words… | $0.001 |
 | netintel_embeddings | Multilingual text embeddings (384-dim) served in-house, no OpenAI… | $0.001 |
-| netintel_email_verify | Verify an email address before you send: syntax + MX +… | $0.001 |
+| netintel_email_verify | Validate an email address — email verification before you send: syntax… | $0.001 |
 | netintel_exa_search | Exa neural web search for AI agents — POST or GET a query, get ranked… | $0.01 |
 | netintel_web_search | Web search for AI agents — one query in, ranked live results out… | $0.01 |
 | netintel_exa_contents | Clean page text for up to 3 URLs in one call via Exa's index + live… | $0.005 |
