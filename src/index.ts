@@ -32,7 +32,7 @@ function registerTools(server: McpServer, api: AxiosInstance) {
   // 1. DNS Lookup
   server.tool(
     "netintel_dns_lookup",
-    "Resolve all DNS records for a domain including A, MX, TXT, SPF, DKIM, DMARC. Returns propagation consistency across Google, Cloudflare and Quad9 resolvers.",
+    "DNS lookup for any domain — resolve A, AAAA, MX, TXT, NS, CNAME, SOA and PTR records in one call. Parses SPF/DMARC from TXT plus DKIM, and cross-checks A records across Google, Cloudflare and Quad9 resolvers for propagation consistency.",
     { domain: z.string() },
     async ({ domain }) => {
       try {
@@ -136,7 +136,7 @@ function registerTools(server: McpServer, api: AxiosInstance) {
   // 9. WHOIS Lookup
   server.tool(
     "netintel_whois_lookup",
-    "Look up domain registration via RDAP — registrar, creation date, expiry date, nameservers, and domain trustworthiness score.",
+    "Domain registration lookup, WHOIS via RDAP — registrar, registration and expiry dates, last-updated date, nameservers, and status flags from the authoritative registry, plus an actionability score for domain trustworthiness, ownership, or availability risk.",
     { domain: z.string() },
     async ({ domain }) => {
       try {
@@ -287,7 +287,7 @@ function registerTools(server: McpServer, api: AxiosInstance) {
   // 20. Page Extract
   server.tool(
     "netintel_page_extract",
-    "Fetch any article or web page and extract clean readable text stripped of ads and boilerplate. Returns content, word count, reading time, and language.",
+    "Fetch any article or web page and extract clean readable text stripped of ads and boilerplate. Returns content, word count, reading time, and language. For JavaScript-rendered or bot-walled pages a plain fetch can't read, use netintel_exa_contents instead.",
     { url: z.string() },
     async ({ url }) => {
       try {
@@ -369,7 +369,7 @@ function registerTools(server: McpServer, api: AxiosInstance) {
   // 26. IP Reputation
   server.tool(
     "netintel_ip_reputation",
-    "Check IP against AbuseIPDB and AlienVault OTX. Returns composite risk score, threat categories, and malware families.",
+    "IP reputation and malicious-IP check — screens an address against AbuseIPDB and AlienVault OTX threat feeds and returns a composite risk score, threat categories, malware families, and full source data.",
     { ip: z.string() },
     async ({ ip }) => {
       try {
@@ -619,7 +619,7 @@ function registerTools(server: McpServer, api: AxiosInstance) {
   // 45. Classify (POST)
   server.tool(
     "netintel_classify",
-    "Classify text into caller-supplied categories using Claude Haiku — zero-shot classification where the agent provides the label set and gets back the best-matching category with confidence and per-label scores, so agents can route, tag, and…",
+    "Classify text into your own categories — zero-shot: supply 2–20 labels and Claude Haiku returns the best-matching category with confidence and per-label scores. Route, tag, triage, and detect intent or topic with your own taxonomy in one call.",
     { text: z.string(), labels: z.array(z.string()), multi_label: z.boolean().optional() },
     async ({ text, labels, multi_label }) => {
       try {
@@ -879,7 +879,7 @@ function registerTools(server: McpServer, api: AxiosInstance) {
   // 65. Web
   server.tool(
     "netintel_web",
-    "Fetch any web page or PDF and convert it to clean, structured Markdown — strips scripts, nav, ads, and boilerplate while preserving headings, links, lists, tables, code blocks, and blockquotes; extracts the text layer from PDFs. Returns…",
+    "Extract text from a web page or PDF as clean Markdown — HTML to Markdown for any URL: strips scripts, nav, ads, and boilerplate while preserving headings, links, lists, tables, code blocks, and blockquotes; extracts the text layer from PDFs. Returns the Markdown body, title, word count, and a quality grade. For JavaScript-rendered or bot-walled pages a plain fetch can't read, use netintel_exa_contents instead.",
     { url: z.string() },
     async ({ url }) => {
       try {
@@ -1334,7 +1334,7 @@ function registerTools(server: McpServer, api: AxiosInstance) {
   // 100. Crypto
   server.tool(
     "netintel_crypto_price",
-    "Spot prices for up to 25 crypto assets in one call — USD, EUR, or GBP — from Coinbase with Kraken and CoinGecko fallback; no API key, one flat price. Per asset: price, 24h change when the answering source provides it, source, cache age…",
+    "Crypto prices for up to 25 coins in one call — live cryptocurrency spot prices for BTC, ETH, SOL and more in USD, EUR, or GBP from Coinbase with Kraken and CoinGecko fallback; no API key, one flat price. Per asset: price, 24h change when the source provides it, source, cache age.",
     { symbols: z.string().optional(), vs: z.string().optional() },
     async ({ symbols, vs }) => {
       try {
@@ -1517,7 +1517,7 @@ function registerTools(server: McpServer, api: AxiosInstance) {
   // 115. Ssl (POST)
   server.tool(
     "netintel_ssl_cert",
-    "Fast SSL/TLS certificate facts for any domain — issuer, subject, SANs, valid from/to, days until expiry, expired/self-signed flags, TLS version, chain length. One TLS handshake, sub-2-second answer. The light, cheap tier under /ssl/analyze…",
+    "SSL certificate check for any domain — issuer, subject, SANs, valid from/to, days until expiry, expired/self-signed flags, TLS version, chain length. One TLS handshake, sub-2-second answer. The light, cheap tier under netintel_ssl_analyze (full analysis, grading).",
     { domain: z.string(), port: z.number().optional() },
     async ({ domain, port }) => {
       try {
@@ -1569,7 +1569,7 @@ function registerTools(server: McpServer, api: AxiosInstance) {
   // 119. Email (POST)
   server.tool(
     "netintel_email_verify",
-    "Verify an email address before you send: syntax + MX + disposable/role/free-provider detection in one call, boolean-first (deliverable, safe_to_send) with a machine-readable reason. DNS-level check only — does not confirm the individual…",
+    "Validate an email address — email verification before you send: syntax + MX + disposable/role/free-provider detection in one call, boolean-first (deliverable, safe_to_send) with a machine-readable reason. DNS-level check only, no SMTP mailbox probe. For a scored trust report instead of a yes/no gate, see netintel_email_intel.",
     { email: z.string() },
     async ({ email }) => {
       try {
