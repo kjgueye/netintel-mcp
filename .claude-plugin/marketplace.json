@@ -1,0 +1,20 @@
+{
+  "name": "netintel",
+  "owner": {
+    "name": "NetIntel",
+    "email": "support@netintel.dev"
+  },
+  "metadata": {
+    "description": "NetIntel for Claude Code — pay-per-call network, domain, web and inference lookups over x402 (USDC on Base). No API keys.",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "netintel",
+      "description": "141 pay-per-call intelligence tools for agents — DNS, SSL, WHOIS, IP reputation, email verification, web fetch & search, an OpenAI-compatible gateway, embeddings and market data — paid per call in USDC over x402. Installs the netintel MCP server and a skill that knows which endpoint to use and what it costs.",
+      "source": "./",
+      "category": "data",
+      "keywords": ["x402", "dns", "ssl", "whois", "ip-reputation", "email-verification", "web-search", "web-fetch", "llm-gateway", "embeddings", "agents"]
+    }
+  ]
+}

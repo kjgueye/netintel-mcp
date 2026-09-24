@@ -4,6 +4,17 @@ MCP server for NetIntel — 122 network intelligence tools for AI agents.
 DNS, SSL, WHOIS, email security, cloud fingerprinting, OSINT and more.
 Pay-per-call via x402 — the NetIntel API accepts USDC on Base or Solana; this MCP server pays on Base. No API keys needed — just a wallet with USDC.
 
+## Install as a Claude Code plugin (recommended)
+
+The plugin installs the MCP server **and** a skill that knows which NetIntel endpoint fits a task and what it costs, and prompts once for the agent wallet key (stored in Claude Code's secure storage, never in settings files):
+
+```
+/plugin marketplace add kjgueye/netintel-mcp
+/plugin install netintel@netintel
+```
+
+Then just ask — "is this IP malicious?", "does this domain have DMARC?", "fetch this URL as JSON" — and the tools pay per call from that wallet.
+
 ## Install
 
 ```bash
