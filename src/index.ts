@@ -39,27 +39,6 @@ function params(obj: Record<string, unknown>): Record<string, unknown> {
 }
 
 function registerTools(server: McpServer, api: AxiosInstance) {
-  // 0. Wallet status — free, local: lets an agent (or a human) tell "no wallet",
-  //    "empty wallet" and "funded" apart before spending a call on finding out.
-  server.tool(
-    "netintel_wallet_status",
-    "Check the agent wallet this MCP server pays NetIntel with: whether a key is configured, its address, and its USDC balance on Base. Free and local (no NetIntel call). Use when a paid tool reports 'Payment required', before funding, or to confirm a top-up arrived. Also lists the tools that work with no wallet at all.",
-    {},
-    async () => {
-      const address = configuredWallet();
-      const free = { free_without_wallet: [...FREE_TOOLS], note: "Free tools are rate-limited per client (about 30/hour); over the quota they cost their normal price." };
-      if (!address) {
-        return ok({ wallet_configured: false, how_to_fund: "Set EVM_PRIVATE_KEY (or the plugin's wallet config) to a dedicated agent wallet, then send it a few dollars of USDC on Base mainnet — no ETH needed, settlement is gasless.", ...free });
-      }
-      try {
-        const usdc = await walletUsdcBalance();
-        return ok({ wallet_configured: true, address, usdc_balance_base: usdc, funded: Number(usdc) > 0, top_up: Number(usdc) > 0 ? undefined : `Send USDC on Base to ${address}`, ...free });
-      } catch (e) {
-        return ok({ wallet_configured: true, address, usdc_balance_base: null, balance_error: String((e as Error).message).slice(0, 160), ...free });
-      }
-    }
-  );
-
   // 1. DNS Lookup
   server.tool(
     "netintel_dns_lookup",
@@ -1664,6 +1643,33 @@ function registerTools(server: McpServer, api: AxiosInstance) {
 
 }
 
+// Wallet status — free, local: lets an agent (or a human) tell "no wallet",
+// "empty wallet" and "funded" apart before spending a call on finding out.
+// Deliberately OUTSIDE registerTools(): scripts/sync-ecosystem.ts pairs each
+// server.tool() in there with the api.get/post path that follows it, and this
+// tool makes no API call.
+function registerWalletTool(server: McpServer) {
+  server.tool(
+    "netintel_wallet_status",
+    "Check the agent wallet this MCP server pays NetIntel with: whether a key is configured, its address, and its USDC balance on Base. Free and local (no NetIntel call). Use when a paid tool reports 'Payment required', before funding, or to confirm a top-up arrived. Also lists the tools that work with no wallet at all.",
+    {},
+    async () => {
+      const address = configuredWallet();
+      const free = { free_without_wallet: [...FREE_TOOLS], note: "Free tools are rate-limited per client (about 30/hour); over the quota they cost their normal price." };
+      if (!address) {
+        return ok({ wallet_configured: false, how_to_fund: "Set EVM_PRIVATE_KEY (or the plugin's wallet config) to a dedicated agent wallet, then send it a few dollars of USDC on Base mainnet — no ETH needed, settlement is gasless.", ...free });
+      }
+      try {
+        const usdc = await walletUsdcBalance();
+        return ok({ wallet_configured: true, address, usdc_balance_base: usdc, funded: Number(usdc) > 0, top_up: Number(usdc) > 0 ? undefined : `Send USDC on Base to ${address}`, ...free });
+      } catch (e) {
+        return ok({ wallet_configured: true, address, usdc_balance_base: null, balance_error: String((e as Error).message).slice(0, 160), ...free });
+      }
+    }
+  );
+
+}
+
 async function main() {
   const api = await createClient();
 
@@ -1673,6 +1679,7 @@ async function main() {
   });
 
   registerTools(server, api);
+  registerWalletTool(server);
 
   const transport = new StdioServerTransport();
   await server.connect(transport);
