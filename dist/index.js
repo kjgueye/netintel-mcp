@@ -2,7 +2,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
-import { createClient } from "./client.js";
+import { createClient, configuredWallet, walletUsdcBalance, FREE_TOOLS } from "./client.js";
 function ok(data) {
     return { content: [{ type: "text", text: JSON.stringify(data) }] };
 }
@@ -10,6 +10,16 @@ function err(e) {
     const ax = e;
     const status = ax.response?.status ?? "unknown";
     const msg = ax.message ?? String(e);
+    if (status === 402) {
+        // The one error a user can act on: the call needs a payment that did not
+        // happen. Say what it costs and exactly what to do, instead of "402".
+        const price = ax.response?.data?.accepts?.[0]?.price;
+        const cost = price ? `This tool costs ${price} per call (USDC on Base). ` : "This tool is paid per call (USDC on Base). ";
+        const fix = configuredWallet()
+            ? `The agent wallet ${configuredWallet()} is configured but the payment did not settle — usually an empty wallet. Run netintel_wallet_status to check its USDC balance, then fund it on Base.`
+            : `No agent wallet is configured, so it cannot be paid. Set EVM_PRIVATE_KEY to a wallet holding USDC on Base (or enter it in the Claude Code plugin config), then retry. Without a wallet these tools still work free, up to a quota: ${FREE_TOOLS.join(", ")}.`;
+        return { content: [{ type: "text", text: `Payment required. ${cost}${fix}` }], isError: true };
+    }
     return {
         content: [{ type: "text", text: `Error (${status}): ${msg}` }],
         isError: true,
@@ -24,6 +34,22 @@ function params(obj) {
     return clean;
 }
 function registerTools(server, api) {
+    // 0. Wallet status — free, local: lets an agent (or a human) tell "no wallet",
+    //    "empty wallet" and "funded" apart before spending a call on finding out.
+    server.tool("netintel_wallet_status", "Check the agent wallet this MCP server pays NetIntel with: whether a key is configured, its address, and its USDC balance on Base. Free and local (no NetIntel call). Use when a paid tool reports 'Payment required', before funding, or to confirm a top-up arrived. Also lists the tools that work with no wallet at all.", {}, async () => {
+        const address = configuredWallet();
+        const free = { free_without_wallet: [...FREE_TOOLS], note: "Free tools are rate-limited per client (about 30/hour); over the quota they cost their normal price." };
+        if (!address) {
+            return ok({ wallet_configured: false, how_to_fund: "Set EVM_PRIVATE_KEY (or the plugin's wallet config) to a dedicated agent wallet, then send it a few dollars of USDC on Base mainnet — no ETH needed, settlement is gasless.", ...free });
+        }
+        try {
+            const usdc = await walletUsdcBalance();
+            return ok({ wallet_configured: true, address, usdc_balance_base: usdc, funded: Number(usdc) > 0, top_up: Number(usdc) > 0 ? undefined : `Send USDC on Base to ${address}`, ...free });
+        }
+        catch (e) {
+            return ok({ wallet_configured: true, address, usdc_balance_base: null, balance_error: String(e.message).slice(0, 160), ...free });
+        }
+    });
     // 1. DNS Lookup
     server.tool("netintel_dns_lookup", "DNS lookup for any domain — resolve A, AAAA, MX, TXT, NS, CNAME, SOA and PTR records in one call. Parses SPF/DMARC from TXT plus DKIM, and cross-checks A records across Google, Cloudflare and Quad9 resolvers for propagation consistency.", { domain: z.string() }, async ({ domain }) => {
         try {

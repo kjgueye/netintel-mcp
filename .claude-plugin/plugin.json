@@ -1,6 +1,6 @@
 {
   "name": "netintel",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Pay-per-call network, domain, web and inference lookups for agents — DNS, SSL, WHOIS, IP reputation, email verification, web fetch & search, OpenAI-compatible gateway, embeddings, market data — paid per call in USDC over x402. No API keys.",
   "author": {
     "name": "NetIntel",
@@ -10,12 +10,29 @@
   "homepage": "https://netintel.dev",
   "repository": "https://github.com/kjgueye/netintel-mcp",
   "license": "MIT",
-  "keywords": ["x402", "dns", "ssl", "whois", "ip-reputation", "email-verification", "web-search", "web-fetch", "llm-gateway", "embeddings", "agents"],
-  "skills": ["./skills/netintel"],
+  "keywords": [
+    "x402",
+    "dns",
+    "ssl",
+    "whois",
+    "ip-reputation",
+    "email-verification",
+    "web-search",
+    "web-fetch",
+    "llm-gateway",
+    "embeddings",
+    "agents"
+  ],
+  "skills": [
+    "./skills/netintel"
+  ],
   "mcpServers": {
     "netintel": {
       "command": "npx",
-      "args": ["-y", "netintel-mcp"],
+      "args": [
+        "-y",
+        "netintel-mcp"
+      ],
       "env": {
         "EVM_PRIVATE_KEY": "${user_config.evm_private_key}"
       }
@@ -25,9 +42,9 @@
     "evm_private_key": {
       "type": "string",
       "title": "Agent wallet private key (Base)",
-      "description": "Private key (0x…) of a wallet holding USDC on Base mainnet. Every tool call pays its listed price from this wallet via x402; nothing else is charged. Use a dedicated agent wallet funded with a few dollars, never your main wallet. Stored in secure storage.",
+      "description": "Optional. Private key (0x…) of a dedicated agent wallet holding USDC on Base mainnet; each paid tool call pays its listed price from it (gasless). Leave empty to start wallet-less: DNS, SSL, WHOIS, subnet and email-auth tools work free up to a quota, and paid tools explain how to fund. Stored in secure storage.",
       "sensitive": true,
-      "required": true
+      "required": false
     }
   }
 }

@@ -16,11 +16,22 @@ certificate is valid, who registered a domain, whether an IP is malicious, wheth
 address exists, what a web page or PDF says, what the web says about a question, or a current
 price.
 
+## Free tier — no wallet needed
+
+Five lookups answer without any payment, up to a per-client quota (about 30/hour and
+200/day; WHOIS 10/hour): `GET /dns/lookup`, `/ssl/cert`, `/whois-rdap/lookup`,
+`/subnet/calc`, `/email-auth`. Free responses carry `X-NetIntel-Tier: free` and
+`X-NetIntel-Free-Remaining`; over the quota the same route returns its normal 402 and
+costs its normal price. So a DNS, certificate, WHOIS, subnet or SPF/DKIM/DMARC check can
+be made immediately, before any wallet exists.
+
 ## How to call
 
 **If the `netintel` MCP server is available** (this plugin installs it), call its tools —
 they are named `netintel_<endpoint>` (`netintel_dns_lookup`, `netintel_ssl_cert`,
 `netintel_web_fetch`, …) and pay automatically from the configured wallet. Prefer them.
+With no wallet configured the free-tier tools still work; a paid tool answers with its
+price and how to fund. `netintel_wallet_status` reports the wallet and its USDC balance.
 
 **Otherwise, pay with any x402 client.** The wallet key must come from the environment —
 never ask the user to paste it into the conversation.
@@ -59,14 +70,14 @@ request returns a `400` that names the missing field — not a charge.
 
 | Task | Endpoint | Price |
 |---|---|---|
-| Resolve DNS records (A/AAAA/MX/TXT/NS/CNAME/SOA, SPF/DMARC parsed) | `GET /dns/lookup?domain=` | $0.002 |
-| Check an SSL/TLS certificate (expiry, chain, issuer) | `GET /ssl/cert?domain=` | $0.003 |
+| Resolve DNS records (A/AAAA/MX/TXT/NS/CNAME/SOA, SPF/DMARC parsed) | `GET /dns/lookup?domain=` | free*, then $0.002 |
+| Check an SSL/TLS certificate (expiry, chain, issuer) | `GET /ssl/cert?domain=` | free*, then $0.003 |
 | Full TLS analysis (protocols, ciphers, weaknesses) | `GET /ssl/analyze?domain=` | $0.007 |
-| WHOIS / RDAP registration data | `GET /whois-rdap/lookup?domain=` | $0.003 |
+| WHOIS / RDAP registration data | `GET /whois-rdap/lookup?domain=` | free*, then $0.003 |
 | Is a domain available to register | `GET /domain-availability/check?domain=` | $0.01 |
 | Domain age | `GET /domain-age/check?domain=` | $0.03 |
 | Vet candidate domain names (availability, quality, typosquats, collisions) | `POST /domain/vet` | $0.20 |
-| Email deliverability & SPF/DKIM/DMARC | `GET /email-auth?domain=` | $0.002 |
+| Email deliverability & SPF/DKIM/DMARC | `GET /email-auth?domain=` | free*, then $0.002 |
 | Verify an email address exists | `GET /email/verify?email=` | $0.001 |
 | IP geolocation | `GET /ip-geo/locate?ip=` | $0.002 |
 | IP reputation / malicious-IP check (AbuseIPDB + OTX) | `GET /ip-reputation/analyze?ip=` | $0.05 |
@@ -82,6 +93,8 @@ request returns a `400` that names the missing field — not a charge.
 | Crypto prices (up to 25 coins in one call) | `GET /crypto/price?ids=` | $0.005 |
 | Currency conversion (fiat and crypto) | `GET /currency-exchange/convert?from=&to=&amount=` | $0.01 |
 | Prediction-market odds | `GET /prediction/markets?q=` | $0.005 |
+
+\* free up to the per-client quota above; `GET /subnet/calc` ($0.005) is free the same way.
 
 The full catalog with every endpoint, its price and a real example is machine-readable at
 `https://netintel.dev/.well-known/x402`, as OpenAPI at `https://netintel.dev/openapi.json`,

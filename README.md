@@ -37,8 +37,8 @@ Or add manually to your Claude Desktop config:
 ```
 
 ## Requirements
-- A wallet private key with USDC on Base mainnet
-- EVM_PRIVATE_KEY environment variable set
+- **Optional:** `EVM_PRIVATE_KEY` — a dedicated agent wallet holding USDC on Base mainnet (gasless; a few dollars is plenty). With it, every tool pays its listed price automatically.
+- **Without a wallet** the server still runs: `netintel_dns_lookup`, `netintel_ssl_cert`, `netintel_whois_lookup`, `netintel_subnet_calc` and `netintel_email_auth` work free (about 30 calls/hour per client, then the normal price), and paid tools reply with what they cost and how to fund. `netintel_wallet_status` shows the wallet, its USDC balance and the free tools.
 
 ## Tools
 
