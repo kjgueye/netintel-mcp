@@ -38,7 +38,7 @@ Or add manually to your Claude Desktop config:
 
 ## Requirements
 - **Optional:** `EVM_PRIVATE_KEY` — a dedicated agent wallet holding USDC on Base mainnet (gasless; a few dollars is plenty). With it, every tool pays its listed price automatically.
-- **Without a wallet** the server still runs: `netintel_dns_lookup`, `netintel_ssl_cert`, `netintel_whois_lookup`, `netintel_subnet_calc` and `netintel_email_auth` work free (about 30 calls/hour per client, then the normal price), and paid tools reply with what they cost and how to fund. `netintel_wallet_status` shows the wallet, its USDC balance and the free tools.
+- **Without a wallet** the server still runs: `netintel_dns_lookup`, `netintel_ssl_cert`, `netintel_whois_lookup`, `netintel_subnet_calc` and `netintel_email_auth` work free (about 30 calls/hour per client, then the normal price), and paid tools reply with what they cost and how to fund. `netintel_wallet_status` shows the wallet, its USDC balance and the free tools. **Spending limits (≥1.1.55):** the server refuses to sign a payment above `NETINTEL_MAX_PER_CALL_USD` (default $0.25) or once it has authorized `NETINTEL_MAX_SESSION_USD` (default $5) in total per process; a refusal returns `SPEND_LIMIT: …` and nothing is paid. Listed prices are what a call costs, not a cap — with a wallet configured every 402 (including a free-tier route past its quota) is paid automatically, so authorize paid calls with your user first.
 
 ## Tools
 
