@@ -1,6 +1,6 @@
 ---
 name: netintel
-description: Pay-per-call lookups for agents via NetIntel over x402 (USDC on Base or Solana, no API key): DNS records, SSL/TLS certificates, WHOIS/RDAP, domain age and availability, IP geolocation and reputation, email verification and SPF/DKIM/DMARC, fetching a URL or PDF as text or JSON, web search with citations, an OpenAI-compatible chat model, embeddings, structured extraction and classification, crypto/FX/prediction-market prices. Five lookups are free within a quota; paid calls cost $0.001–$0.65 each.
+description: 'Pay-per-call lookups for agents via NetIntel over x402 (USDC on Base or Solana, no API key): DNS records, SSL/TLS certificates, WHOIS/RDAP, domain age and availability, IP geolocation and reputation, email verification and SPF/DKIM/DMARC, fetching a URL or PDF as text or JSON, web search with citations, an OpenAI-compatible chat model, embeddings, structured extraction and classification, crypto/FX/prediction-market prices. Five lookups are free within a quota; paid calls cost $0.001–$0.65 each.'
 license: MIT
 ---
 
