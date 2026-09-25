@@ -1,6 +1,6 @@
 {
   "name": "netintel",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Pay-per-call network, domain, web and inference lookups for agents — DNS, SSL, WHOIS, IP reputation, email verification, web fetch & search, OpenAI-compatible gateway, embeddings, market data — paid per call in USDC over x402. No API keys.",
   "author": {
     "name": "NetIntel",
@@ -34,7 +34,9 @@
         "netintel-mcp"
       ],
       "env": {
-        "EVM_PRIVATE_KEY": "${user_config.evm_private_key}"
+        "EVM_PRIVATE_KEY": "${user_config.evm_private_key}",
+        "NETINTEL_MAX_PER_CALL_USD": "${user_config.max_per_call_usd}",
+        "NETINTEL_MAX_SESSION_USD": "${user_config.max_session_usd}"
       }
     }
   },
@@ -45,6 +47,18 @@
       "description": "Optional. Private key (0x…) of a dedicated agent wallet holding USDC on Base mainnet; each paid tool call pays its listed price from it (gasless). Leave empty to start wallet-less: DNS, SSL, WHOIS, subnet and email-auth tools work free up to a quota, and paid tools explain how to fund. Stored in secure storage.",
       "sensitive": true,
       "required": false
+    },
+    "max_per_call_usd": {
+      "type": "string",
+      "title": "Max USD per call",
+      "description": "Refuse any single NetIntel payment above this amount (USDC). The most expensive endpoint is $0.65; most lookups are under $0.01.",
+      "default": "0.25"
+    },
+    "max_session_usd": {
+      "type": "string",
+      "title": "Max USD per session",
+      "description": "Refuse further payments once this MCP server process has authorized this much in total. Restart the server to reset.",
+      "default": "5"
     }
   }
 }

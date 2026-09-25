@@ -1,6 +1,6 @@
 ---
 name: netintel
-description: Pay-per-call lookups for agents via NetIntel (x402, USDC on Base or Solana, no API key) — use when a task needs DNS records, SSL/TLS certificate checks, WHOIS/RDAP, domain age or availability, vetting a domain name, IP geolocation or IP reputation, email verification or SPF/DKIM/DMARC checks, fetching a URL or PDF as text or JSON, web search with citations, an OpenAI-compatible chat model, embeddings, structured extraction or classification of text, or crypto, FX and prediction-market prices. Each call costs $0.001–$0.65 and is paid from the agent's wallet; failed calls are never charged.
+description: Pay-per-call lookups for agents via NetIntel over x402 (USDC on Base or Solana, no API key): DNS records, SSL/TLS certificates, WHOIS/RDAP, domain age and availability, IP geolocation and reputation, email verification and SPF/DKIM/DMARC, fetching a URL or PDF as text or JSON, web search with citations, an OpenAI-compatible chat model, embeddings, structured extraction and classification, crypto/FX/prediction-market prices. Five lookups are free within a quota; paid calls cost $0.001–$0.65 each.
 license: MIT
 ---
 
@@ -24,6 +24,33 @@ Five lookups answer without any payment, up to a per-client quota (about 30/hour
 `X-NetIntel-Free-Remaining`; over the quota the same route returns its normal 402 and
 costs its normal price. So a DNS, certificate, WHOIS, subnet or SPF/DKIM/DMARC check can
 be made immediately, before any wallet exists.
+
+## Payment, authorization and spending limits — read before any paid call
+
+- **Payment is automatic once a wallet is configured.** The MCP server (and any x402
+  client) pays every 402 it meets without asking — including a free-tier route whose quota
+  is exhausted, which then costs its normal price. The prices in this file are what a call
+  costs; they are **not** a spending cap.
+- **Get the user's authorization before paid calls.** Tell the user what you intend to call
+  and what it costs (read the price from the 402, or from the table below) before the first
+  paid call of a task, and again before anything above a few cents. Free-tier tools need no
+  authorization; they never pay.
+- **Enforceable limits (netintel-mcp ≥ 1.1.55):** the server refuses to sign any payment above
+  `NETINTEL_MAX_PER_CALL_USD` (default **$0.25**) or once it has authorized more than
+  `NETINTEL_MAX_SESSION_USD` (default **$5.00**) in total during its process lifetime. A refusal
+  returns `SPEND_LIMIT: …` naming the limit; nothing is signed or sent. Both are set by env or
+  in the Claude Code plugin's configuration; `netintel_wallet_status` shows the limits and the
+  session's authorized total. Other x402 clients used with this skill may provide **no** limit —
+  then the wallet balance is the only cap, so fund the agent wallet with only what you are
+  willing to spend.
+
+## Installing the server is a separate step
+
+A skill registry archives this document only. To make the tools available you must install
+and configure the MCP server or the Claude Code plugin yourself — see
+https://github.com/kjgueye/netintel-mcp#readme (`/plugin marketplace add kjgueye/netintel-mcp`,
+or `claude mcp add netintel-mcp`) — and, for paid calls, fund a dedicated agent wallet. Without
+the server, this skill still tells you which HTTP endpoint fits a task and what it costs.
 
 ## How to call
 

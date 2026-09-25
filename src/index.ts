@@ -3,7 +3,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
-import { createClient, configuredWallet, walletUsdcBalance, FREE_TOOLS } from "./client.js";
+import { createClient, configuredWallet, walletUsdcBalance, spendStatus, FREE_TOOLS } from "./client.js";
 import type { AxiosInstance } from "axios";
 
 function ok(data: unknown) {
@@ -14,6 +14,12 @@ function err(e: unknown) {
   const ax = e as { response?: { status?: number; data?: { accepts?: Array<{ price?: string }> } }; message?: string };
   const status = ax.response?.status ?? "unknown";
   const msg = ax.message ?? String(e);
+  // A spending-limit refusal: the SDK aborted BEFORE signing, so no payment was
+  // made. Hand the agent the exact reason (which limit, how to raise it).
+  const limitAt = msg.indexOf("SPEND_LIMIT:");
+  if (limitAt >= 0) {
+    return { content: [{ type: "text" as const, text: `Payment refused by your spending limit — nothing was paid. ${msg.slice(limitAt)}` }], isError: true };
+  }
   if (status === 402) {
     // The one error a user can act on: the call needs a payment that did not
     // happen. Say what it costs and exactly what to do, instead of "402".
@@ -1651,7 +1657,7 @@ function registerTools(server: McpServer, api: AxiosInstance) {
 function registerWalletTool(server: McpServer) {
   server.tool(
     "netintel_wallet_status",
-    "Check the agent wallet this MCP server pays NetIntel with: whether a key is configured, its address, and its USDC balance on Base. Free and local (no NetIntel call). Use when a paid tool reports 'Payment required', before funding, or to confirm a top-up arrived. Also lists the tools that work with no wallet at all.",
+    "Check the agent wallet this MCP server pays NetIntel with: whether a key is configured, its address, its USDC balance on Base, and the spending limits (per call and per session) with how much this session has authorized. Free and local (no NetIntel call). Use when a paid tool reports 'Payment required' or 'SPEND_LIMIT', before funding, or to confirm a top-up arrived. Also lists the tools that work with no wallet at all.",
     {},
     async () => {
       const address = configuredWallet();
@@ -1661,9 +1667,9 @@ function registerWalletTool(server: McpServer) {
       }
       try {
         const usdc = await walletUsdcBalance();
-        return ok({ wallet_configured: true, address, usdc_balance_base: usdc, funded: Number(usdc) > 0, top_up: Number(usdc) > 0 ? undefined : `Send USDC on Base to ${address}`, ...free });
+        return ok({ wallet_configured: true, address, usdc_balance_base: usdc, funded: Number(usdc) > 0, top_up: Number(usdc) > 0 ? undefined : `Send USDC on Base to ${address}`, spending_limits: spendStatus(), ...free });
       } catch (e) {
-        return ok({ wallet_configured: true, address, usdc_balance_base: null, balance_error: String((e as Error).message).slice(0, 160), ...free });
+        return ok({ wallet_configured: true, address, usdc_balance_base: null, balance_error: String((e as Error).message).slice(0, 160), spending_limits: spendStatus(), ...free });
       }
     }
   );
