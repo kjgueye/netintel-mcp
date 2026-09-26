@@ -33,8 +33,9 @@ be made immediately, before any wallet exists.
   costs; they are **not** a spending cap.
 - **Get the user's authorization before paid calls.** Tell the user what you intend to call
   and what it costs (read the price from the 402, or from the table below) before the first
-  paid call of a task, and again before anything above a few cents. Free-tier tools need no
-  authorization; they never pay.
+  paid call of a task, and again before anything above a few cents. If a wallet is configured,
+  obtain authorization to pay the listed normal price before calling a free-tier route too:
+  it will auto-pay if its free quota is exhausted.
 - **Enforceable limits (netintel-mcp ≥ 1.1.55):** the server refuses to sign any payment above
   `NETINTEL_MAX_PER_CALL_USD` (default **$0.25**) or once it has authorized more than
   `NETINTEL_MAX_SESSION_USD` (default **$5.00**) in total during its process lifetime. A refusal
