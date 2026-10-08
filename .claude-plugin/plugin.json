@@ -44,7 +44,7 @@
     "evm_private_key": {
       "type": "string",
       "title": "Agent wallet private key (Base)",
-      "description": "Optional. Private key (0x…) of a dedicated agent wallet holding USDC on Base mainnet; each paid tool call pays its listed price from it (gasless). Leave empty to start wallet-less: DNS, SSL, WHOIS, subnet and email-auth tools work free up to a quota, and paid tools explain how to fund. Stored in secure storage.",
+      "description": "Optional. Private key (0x…) of a dedicated agent wallet holding USDC on Base mainnet; each paid tool call pays its listed price from it (gasless). Leave empty to start wallet-less: tools then explain what a call costs and how to fund. Stored in secure storage.",
       "sensitive": true,
       "required": false
     },

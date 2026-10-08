@@ -27,7 +27,7 @@ function err(e: unknown) {
     const cost = price ? `This tool costs ${price} per call (USDC on Base). ` : "This tool is paid per call (USDC on Base). ";
     const fix = configuredWallet()
       ? `The agent wallet ${configuredWallet()} is configured but the payment did not settle — usually an empty wallet. Run netintel_wallet_status to check its USDC balance, then fund it on Base.`
-      : `No agent wallet is configured, so it cannot be paid. Set EVM_PRIVATE_KEY to a wallet holding USDC on Base (or enter it in the Claude Code plugin config), then retry. Without a wallet these tools still work free, up to a quota: ${FREE_TOOLS.join(", ")}.`;
+      : `No agent wallet is configured, so it cannot be paid. Set EVM_PRIVATE_KEY to a wallet holding USDC on Base (or enter it in the Claude Code plugin config), then retry.${FREE_TOOLS.length ? ` Without a wallet these tools still work free, up to a quota: ${FREE_TOOLS.join(", ")}.` : ""}`;
     return { content: [{ type: "text" as const, text: `Payment required. ${cost}${fix}` }], isError: true };
   }
   return {
@@ -1657,11 +1657,13 @@ function registerTools(server: McpServer, api: AxiosInstance) {
 function registerWalletTool(server: McpServer) {
   server.tool(
     "netintel_wallet_status",
-    "Check the agent wallet this MCP server pays NetIntel with: whether a key is configured, its address, its USDC balance on Base, and the spending limits (per call and per session) with how much this session has authorized. Free and local (no NetIntel call). Use when a paid tool reports 'Payment required' or 'SPEND_LIMIT', before funding, or to confirm a top-up arrived. Also lists the tools that work with no wallet at all.",
+    `Check the agent wallet this MCP server pays NetIntel with: whether a key is configured, its address, its USDC balance on Base, and the spending limits (per call and per session) with how much this session has authorized. Free and local (no NetIntel call). Use when a paid tool reports 'Payment required' or 'SPEND_LIMIT', before funding, or to confirm a top-up arrived.${FREE_TOOLS.length ? " Also lists the tools that work with no wallet at all." : ""}`,
     {},
     async () => {
       const address = configuredWallet();
-      const free = { free_without_wallet: [...FREE_TOOLS], note: "Free tools are rate-limited per client (about 30/hour); over the quota they cost their normal price." };
+      const free = FREE_TOOLS.length
+        ? { free_without_wallet: [...FREE_TOOLS], note: "Free tools are rate-limited per client (about 30/hour); over the quota they cost their normal price." }
+        : {};
       if (!address) {
         return ok({ wallet_configured: false, how_to_fund: "Set EVM_PRIVATE_KEY (or the plugin's wallet config) to a dedicated agent wallet, then send it a few dollars of USDC on Base mainnet — no ETH needed, settlement is gasless.", ...free });
       }

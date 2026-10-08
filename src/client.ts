@@ -12,22 +12,22 @@ const BASE_URL = "https://netintel.dev";
 /** USDC on Base mainnet — the asset every NetIntel price is quoted in. */
 const USDC_BASE = "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913" as const;
 
-/** Tools that work with NO wallet: NetIntel's free tier (per-client quota, then the normal price). */
-export const FREE_TOOLS = [
-  "netintel_dns_lookup",
-  "netintel_ssl_cert",
-  "netintel_whois_lookup",
-  "netintel_subnet_calc",
-  "netintel_email_auth",
-] as const;
+/**
+ * Tools that work with NO wallet. NetIntel's free tier is switched by the API's
+ * FREE_TIER env and has been OFF since 2026-10-08, so every call is paid and this
+ * list is empty. If the API turns it back on, list its tools here again
+ * (netintel_dns_lookup, netintel_ssl_cert, netintel_whois_lookup,
+ * netintel_subnet_calc, netintel_email_auth) — every "works free" message keys off it.
+ */
+export const FREE_TOOLS: readonly string[] = [];
 
 let walletAddress: `0x${string}` | null = null;
 
 /**
  * Spending limits, enforced INSIDE the x402 client immediately before a payment
  * payload is signed — the only place a limit can be real, because with a wallet
- * configured every 402 (including a free-tier route past its quota) is paid
- * automatically. The listed per-call prices are what a route costs, not a cap.
+ * configured every 402 is paid automatically. The listed per-call prices are
+ * what a route costs, not a cap.
  *   NETINTEL_MAX_PER_CALL_USD  — refuse any single payment above this (default $0.25)
  *   NETINTEL_MAX_SESSION_USD   — refuse once this MCP server process has authorized
  *                                this much in total (default $5.00)
@@ -67,17 +67,18 @@ export function configuredWallet(): `0x${string}` | null {
 /**
  * The HTTP client every tool uses. With EVM_PRIVATE_KEY set, responses that
  * demand payment are paid automatically (x402) and retried; without it, the
- * server still starts — the free-tier tools work as-is and paid tools return
- * an explanation of what a call costs and how to fund a wallet, instead of
- * failing to boot for everyone who installed the plugin before funding one.
+ * server still starts — tools return an explanation of what a call costs and
+ * how to fund a wallet (and any FREE_TOOLS work as-is), instead of failing to
+ * boot for everyone who installed the plugin before funding one.
  */
 export async function createClient(): Promise<AxiosInstance> {
   const key = process.env.EVM_PRIVATE_KEY?.trim();
   const plain = axios.create({ baseURL: BASE_URL });
   if (!key) {
     console.error(
-      "[netintel-mcp] No EVM_PRIVATE_KEY set — running wallet-less. Free-tier tools work " +
-        `(${FREE_TOOLS.join(", ")}); paid tools will explain how to fund an agent wallet.`
+      "[netintel-mcp] No EVM_PRIVATE_KEY set — running wallet-less. " +
+        (FREE_TOOLS.length ? `Free-tier tools work (${FREE_TOOLS.join(", ")}); ` : "") +
+        "paid tools will explain how to fund an agent wallet."
     );
     return plain;
   }
