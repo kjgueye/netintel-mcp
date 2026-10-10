@@ -1,6 +1,6 @@
 {
   "name": "netintel-mcp",
-  "version": "1.1.57",
+  "version": "1.1.58",
   "mcpName": "io.github.kjgueye/netintel-mcp",
   "repository": {
     "type": "git",
@@ -36,6 +36,7 @@
     "@x402/axios": "^2.9.0",
     "@x402/core": "^2.9.0",
     "@x402/evm": "^2.9.0",
+    "axios": "^1.20.0",
     "viem": "^2.31.3",
     "zod": "^3.25.67"
   },

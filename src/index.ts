@@ -1647,6 +1647,19 @@ function registerTools(server: McpServer, api: AxiosInstance) {
     }
   );
 
+  // 124. Pdf (POST)
+  server.tool(
+    "netintel_pdf_parse",
+    "Parse a PDF to text and Markdown: send a PDF url or base64 file, get clean Markdown with paragraphs rebuilt from the text layer, per-page character offsets for citing pages, metadata (title, author, dates, page count) and the page numbers…",
+    { url: z.string().optional(), file_base64: z.string().optional(), pages: z.string().optional(), max_chars: z.number().optional() },
+    async ({ url, file_base64, pages, max_chars }) => {
+      try {
+        const res = await api.post("/pdf/parse", { url, file_base64, pages, max_chars });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
 }
 
 // Wallet status — free, local: lets an agent (or a human) tell "no wallet",
