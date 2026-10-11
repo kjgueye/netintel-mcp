@@ -11,7 +11,7 @@ function ok(data: unknown) {
 }
 
 function err(e: unknown) {
-  const ax = e as { response?: { status?: number; data?: { accepts?: Array<{ price?: string }> } }; message?: string };
+  const ax = e as { response?: { status?: number; data?: { accepts?: Array<{ price?: string }>; error?: unknown; code?: unknown } }; message?: string };
   const status = ax.response?.status ?? "unknown";
   const msg = ax.message ?? String(e);
   // A spending-limit refusal: the SDK aborted BEFORE signing, so no payment was
@@ -23,15 +23,25 @@ function err(e: unknown) {
   if (status === 402) {
     // The one error a user can act on: the call needs a payment that did not
     // happen. Say what it costs and exactly what to do, instead of "402".
-    const price = ax.response?.data?.accepts?.[0]?.price;
+    // v1 bodies state `price` ("$0.002"); v2 bodies state the atomic USDC `amount` ("2000").
+    const first = ax.response?.data?.accepts?.[0] as { price?: string; amount?: unknown } | undefined;
+    const price = first?.price ?? (/^\d+$/.test(String(first?.amount ?? "")) ? `$${Number(first!.amount) / 1_000_000}` : undefined);
     const cost = price ? `This tool costs ${price} per call (USDC on Base). ` : "This tool is paid per call (USDC on Base). ";
     const fix = configuredWallet()
       ? `The agent wallet ${configuredWallet()} is configured but the payment did not settle — usually an empty wallet. Run netintel_wallet_status to check its USDC balance, then fund it on Base.`
       : `No agent wallet is configured, so it cannot be paid. Set EVM_PRIVATE_KEY to a wallet holding USDC on Base (or enter it in the Claude Code plugin config), then retry.${FREE_TOOLS.length ? ` Without a wallet these tools still work free, up to a quota: ${FREE_TOOLS.join(", ")}.` : ""}`;
     return { content: [{ type: "text" as const, text: `Payment required. ${cost}${fix}` }], isError: true };
   }
+  // The server's own words, when it sent any: NetIntel's 4xx bodies name the
+  // missing field or say why there is no answer — and that nothing was charged —
+  // which tells an agent far more than axios's "Request failed with status code 404".
+  const body = ax.response?.data;
+  const said = typeof body?.error === "string" ? body.error
+    : typeof (body?.error as { message?: unknown } | undefined)?.message === "string" ? (body!.error as { message: string }).message
+    : null;
+  const detail = said ? ` — ${said}${typeof body?.code === "string" ? ` [${body.code}]` : ""}` : "";
   return {
-    content: [{ type: "text" as const, text: `Error (${status}): ${msg}` }],
+    content: [{ type: "text" as const, text: `Error (${status}): ${msg}${detail}` }],
     isError: true,
   };
 }
@@ -1662,6 +1672,61 @@ function registerTools(server: McpServer, api: AxiosInstance) {
 
 }
 
+// The NetIntel Router: "which x402 endpoint should I call?" over the whole
+// Coinbase Bazaar catalog — every provider, not only NetIntel — on its own host.
+// Deliberately OUTSIDE registerTools(): scripts/sync-ecosystem.ts pairs the tools
+// in there with netintel.dev API paths; it lists these three on their own,
+// priced from router/src/prices.ts in the NetIntel repo. Same wallet and the same spending limits: the x402 client pays any
+// host it is sent to, but only after onBeforePaymentCreation approves the amount.
+const ROUTER_URL = "https://router.netintel.dev";
+
+function registerRouterTools(server: McpServer, api: AxiosInstance) {
+  // Router: search (free)
+  server.tool(
+    "netintel_route_search",
+    "Find which x402 pay-per-call API endpoint fits a job, from ANY provider (not only NetIntel): ranks every endpoint in the Coinbase Bazaar catalog by fit, real paying demand, health and price, and returns each pick's URL, price, inputs and plain-words reasons. Free (60 searches an hour). Use it before paying an endpoint you do not know; netintel_route_recommend health-checks the top picks live.",
+    {
+      query: z.string().describe("The job, in plain words, e.g. \"check SPF DKIM DMARC for a domain\""),
+      limit: z.number().int().min(1).max(25).optional().describe("Results to return, 1-25 (default 5)"),
+    },
+    async ({ query, limit }) => {
+      try {
+        const res = await api.get(`${ROUTER_URL}/route/search`, { params: { q: query, limit: limit ?? 5 } });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
+  // Router: recommend (paid)
+  server.tool(
+    "netintel_route_recommend",
+    "Get the 3 best x402 endpoints for a job, from three different providers, each health-checked live just now: its live price quote, its input schema and the reasons. Paid per call; not charged when no candidate passes the live check. It does not call the endpoint for you: NetIntel picks map to the netintel_* tools; a third-party pick needs your own x402 client.",
+    { query: z.string().describe("The job, in plain words, e.g. \"geocode an address to latitude and longitude\"") },
+    async ({ query }) => {
+      try {
+        const res = await api.get(`${ROUTER_URL}/route/recommend`, { params: { q: query } });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+
+  // Router: vet (paid)
+  server.tool(
+    "netintel_route_vet",
+    "Check one x402 endpoint before relying on it: give its URL as the Coinbase Bazaar lists it and get a live payment-challenge check, its current price quote, its 7/30/90-day check history and paying-wallet trend, and a verdict: ok, slow, unstable or failing. Paid per call; not charged when the URL is not in the catalog.",
+    {
+      url: z.string().describe("The endpoint's resource URL, exactly as listed (netintel_route_search returns it as resource_url)"),
+      method: z.enum(["GET", "POST"]).optional().describe("Only when the URL is listed under both methods"),
+    },
+    async ({ url, method }) => {
+      try {
+        const res = await api.get(`${ROUTER_URL}/route/vet`, { params: params({ url, method }) });
+        return ok(res.data);
+      } catch (e) { return err(e); }
+    }
+  );
+}
+
 // Wallet status — free, local: lets an agent (or a human) tell "no wallet",
 // "empty wallet" and "funded" apart before spending a call on finding out.
 // Deliberately OUTSIDE registerTools(): scripts/sync-ecosystem.ts pairs each
@@ -1700,6 +1765,7 @@ async function main() {
   });
 
   registerTools(server, api);
+  registerRouterTools(server, api);
   registerWalletTool(server);
 
   const transport = new StdioServerTransport();

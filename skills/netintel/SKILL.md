@@ -1,6 +1,6 @@
 ---
 name: netintel
-description: 'Pay-per-call lookups for agents via NetIntel over x402 (USDC on Base or Solana, no API key): DNS records, SSL/TLS certificates, WHOIS/RDAP, domain age and availability, IP geolocation and reputation, email verification and SPF/DKIM/DMARC, fetching a URL or PDF as text or JSON, web search with citations, an OpenAI-compatible chat model, embeddings, structured extraction and classification, crypto/FX/prediction-market prices. Paid calls cost $0.001–$0.65 each.'
+description: 'Pay-per-call lookups for agents via NetIntel over x402 (USDC on Base or Solana, no API key): DNS records, SSL/TLS certificates, WHOIS/RDAP, domain age and availability, IP geolocation and reputation, email verification and SPF/DKIM/DMARC, fetching a URL or PDF as text or JSON, web search with citations, an OpenAI-compatible chat model, embeddings, structured extraction and classification, crypto/FX/prediction-market prices. Also finds which x402 endpoint from any provider fits a job (NetIntel Router: free ranked search, live-checked recommendations, endpoint vetting). Paid calls cost $0.001–$0.65 each.'
 license: MIT
 ---
 
@@ -113,6 +113,23 @@ request returns a `400` that names the missing field — not a charge.
 The full catalog with every endpoint, its price and a real example is machine-readable at
 `https://netintel.dev/.well-known/x402`, as OpenAPI at `https://netintel.dev/openapi.json`,
 and as prose at `https://netintel.dev/llms.txt`.
+
+## When no NetIntel endpoint fits: find one from any provider
+
+The NetIntel Router ranks the whole Coinbase Bazaar catalog of x402 endpoints — every
+provider, not only NetIntel — for a job described in plain words, by fit, real paying demand,
+health and price, and says why. NetIntel's own endpoints are labeled and get no boost.
+
+| Task | Endpoint | Price |
+|---|---|---|
+| List candidate endpoints for a job, ranked, with reasons | `GET https://router.netintel.dev/route/search?q=` | free |
+| Get the 3 best endpoints for a job, each health-checked live, with price quotes and inputs | `GET https://router.netintel.dev/route/recommend?q=` | $0.005 |
+| Check one endpoint before relying on it (live check, history, verdict) | `GET https://router.netintel.dev/route/vet?url=` | $0.002 |
+
+MCP tools: `netintel_route_search`, `netintel_route_recommend`, `netintel_route_vet`. The router
+does not call the endpoint it recommends: a NetIntel pick maps to a `netintel_*` tool; a
+third-party pick needs your own x402 client (see "How to call"). Daily rankings for 40 common
+agent tasks: https://router.netintel.dev/rankings
 
 ## Spend-aware usage
 
