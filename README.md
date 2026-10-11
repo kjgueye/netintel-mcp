@@ -3,6 +3,7 @@
 MCP server for NetIntel — 123 network intelligence tools for AI agents.
 DNS, SSL, WHOIS, email security, cloud fingerprinting, OSINT and more.
 Pay-per-call via x402 — the NetIntel API accepts USDC on Base or Solana; this MCP server pays on Base. No API keys needed — just a wallet with USDC.
+Plus 3 router tools that find the best x402 endpoint for a job from **any** provider — [details below](#find-the-right-x402-endpoint-from-any-provider).
 
 ## Install as a Claude Code plugin (recommended)
 
@@ -170,6 +171,16 @@ Or add manually to your Claude Desktop config:
 | netintel_exa_answer | Ask a question, get a direct answer grounded in a live web search, with… | $0.01 |
 | netintel_pdf_parse | Parse a PDF to text and Markdown: send a PDF url or base64 file, get… | $0.005 |
 
+## Find the right x402 endpoint from any provider
+
+These tools answer "which x402 endpoint should I call?" over the whole Coinbase Bazaar catalog — every provider, not only NetIntel — ranked by fit, real paying demand, health and price, with the reasons. They call the NetIntel Router (https://router.netintel.dev) with the same wallet and spending limits. NetIntel's own endpoints are labeled and get no boost. Daily rankings for 40 common agent tasks: https://router.netintel.dev/rankings
+
+| Tool | Description | Price |
+|------|-------------|-------|
+| netintel_route_search | Find which x402 pay-per-call API endpoint fits a job, from ANY provider… | free |
+| netintel_route_recommend | Get the 3 best x402 endpoints for a job, from three different… | $0.005 |
+| netintel_route_vet | Check one x402 endpoint before relying on it: give its URL as the… | $0.002 |
+
 ## Payment
 All tools pay automatically via x402 in USDC on Base mainnet.
 Your wallet is charged per call. No subscriptions, no API keys.
@@ -181,4 +192,5 @@ over x402 with a Solana wallet if you prefer that rail.)
 - API manifest: https://netintel.dev/.well-known/x402
 - OpenAPI spec: https://netintel.dev/openapi.json
 - Agent catalog: https://netintel.dev/llms.txt
+- Router (which x402 endpoint to call; daily rankings): https://router.netintel.dev/rankings
 - Source: https://github.com/kjgueye/netintel-mcp
