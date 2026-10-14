@@ -757,7 +757,7 @@ function registerTools(server, api) {
         }
     });
     // 70. Messages (POST)
-    server.tool("netintel_messages", "OpenAI-compatible chat completions over x402, answered by Claude Sonnet 4.6 — send a messages array and get an assistant reply for Q&A, reasoning, agent planning, coding help, summarization, extraction, classification, and chatbot…", { model: z.string().optional(), messages: z.array(z.any()), max_tokens: z.number().optional(), temperature: z.number().optional(), top_p: z.number().optional() }, async ({ model, messages, max_tokens, temperature, top_p }) => {
+    server.tool("netintel_messages", "OpenAI-compatible chat completions over x402, answered by Claude Sonnet 4.6 — send a messages array and get an assistant reply for Q&A, reasoning, agent planning, coding help, summarization, extraction, and classification. Vision: user content may include up to 4 https image_url parts (describe, read/OCR, compare images).", { model: z.string().optional(), messages: z.array(z.any()), max_tokens: z.number().optional(), temperature: z.number().optional(), top_p: z.number().optional() }, async ({ model, messages, max_tokens, temperature, top_p }) => {
         try {
             const res = await api.post("/messages", { model, messages, max_tokens, temperature, top_p });
             return ok(res.data);
