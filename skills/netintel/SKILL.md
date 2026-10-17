@@ -1,6 +1,6 @@
 ---
 name: netintel
-description: 'Pay-per-call lookups for agents via NetIntel over x402 (USDC on Base or Solana, no API key): DNS records, SSL/TLS certificates, WHOIS/RDAP, domain age and availability, IP geolocation and reputation, email verification and SPF/DKIM/DMARC, fetching a URL or PDF as text or JSON, web search with citations, an OpenAI-compatible chat model, embeddings, structured extraction and classification, crypto/FX/prediction-market prices. Also finds which x402 endpoint from any provider fits a job (NetIntel Router: free ranked search, live-checked recommendations, endpoint vetting). Paid calls cost $0.001–$0.65 each.'
+description: 'Pay-per-call lookups for agents via NetIntel over x402 (USDC on Base or Solana, no API key): DNS records, SSL/TLS certificates, WHOIS/RDAP, domain age and availability, IP geolocation and reputation, email verification and SPF/DKIM/DMARC, fetching a URL or PDF as text or JSON, web search with citations, an OpenAI-compatible chat model, embeddings, structured extraction and classification, crypto/FX/prediction-market prices. Also finds which x402 endpoint from any provider fits a job (NetIntel Router: free ranked search, live-checked recommendations, endpoint vetting). Paid calls cost $0.001–$0.65 each, paid from AgentCash, the Coinbase Agentic Wallet (awal), Coinbase Wallet MCP or the netintel MCP server.'
 license: MIT
 ---
 
@@ -18,9 +18,10 @@ price.
 
 ## Payment, authorization and spending limits — read before any paid call
 
-- **Payment is automatic once a wallet is configured.** The MCP server (and any x402
-  client) pays every 402 it meets without asking. The prices in this file are what a call
-  costs; they are **not** a spending cap.
+- **Payment is usually automatic.** The `netintel` MCP server with a key, AgentCash and the
+  Coinbase Agentic Wallet pay every 402 they meet without asking; Coinbase Wallet MCP asks the
+  user to approve each payment. The prices in this file are what a call costs; they are
+  **not** a spending cap.
 - **Get the user's authorization before paid calls.** Tell the user what you intend to call
   and what it costs (read the price from the 402, or from the table below) before the first
   paid call of a task, and again before anything above a few cents.
@@ -29,28 +30,48 @@ price.
   `NETINTEL_MAX_SESSION_USD` (default **$5.00**) in total during its process lifetime. A refusal
   returns `SPEND_LIMIT: …` naming the limit; nothing is signed or sent. Both are set by env or
   in the Claude Code plugin's configuration; `netintel_wallet_status` shows the limits and the
-  session's authorized total. Other x402 clients used with this skill may provide **no** limit —
-  then the wallet balance is the only cap, so fund the agent wallet with only what you are
-  willing to spend.
+  session's authorized total. With another wallet, cap each call at its price — AgentCash
+  `fetch` takes a maximum amount, `awal x402 pay` takes `--max-amount`, Wallet MCP takes
+  `maxPayment` — and rely on that wallet's own limits; where a client has **no** limit the
+  wallet balance is the only cap, so fund it with only what you are willing to spend.
 
-## Installing the server is a separate step
+## How to call and pay
 
-A skill registry archives this document only. To make the tools available you must install
-and configure the MCP server or the Claude Code plugin yourself — see
-https://github.com/kjgueye/netintel-mcp#readme (`/plugin marketplace add kjgueye/netintel-mcp`,
-or `claude mcp add netintel-mcp`) — and, for paid calls, fund a dedicated agent wallet. Without
-the server, this skill still tells you which HTTP endpoint fits a task and what it costs.
+Every endpoint is a plain HTTPS URL, so this skill works on its own with whichever wallet the
+agent already has. Use the first option that applies. **Never ask the user to paste a private
+key into the conversation.**
 
-## How to call
+1. **The `netintel` MCP server with a wallet key** (`netintel_wallet_status` reports
+   `wallet_configured: true`): call its tools, named `netintel_<endpoint>`
+   (`netintel_dns_lookup`, `netintel_ssl_cert`, `netintel_web_fetch`, …). They pay
+   automatically within the server's spending limits.
+2. **AgentCash** (the agent has its `fetch` tool): call `fetch` with the endpoint URL —
+   `{"url":"https://netintel.dev/dns/lookup?domain=example.com"}` for a GET, or
+   `{"url":"https://netintel.dev/web/search","method":"POST","body":"{\"query\":\"…\"}"}` for a
+   POST (`body` is the JSON as a string). It pays the 402 from the AgentCash balance.
+   `check_endpoint_schema` returns a route's exact input fields without paying.
+3. **Coinbase Agentic Wallet** (`awal`, from a shell):
+   `npx awal@latest x402 pay 'https://netintel.dev/dns/lookup?domain=example.com' --max-amount 2000`,
+   or for a POST
+   `npx awal@latest x402 pay 'https://netintel.dev/web/search' -X POST -d '{"query":"…"}' --max-amount 10000`.
+   `--max-amount` is in USDC atomic units (1000000 = $1): set it to the call's price.
+4. **Coinbase Wallet MCP** (it has `initiate_x402_request`): call it with `url`, `method`,
+   `body` (POST only) and `maxPayment` set to the price (e.g. `"0.002"`); the user approves the
+   payment in Coinbase Wallet; then call `complete_x402_request` with the `requestId`. One
+   approval per call, so it suits the pricier endpoints best.
+5. **The `netintel` MCP server without a key:** every paid tool answers with the exact request
+   (URL, method, body) and its price, ready for option 2, 3 or 4 — use that.
+6. **No wallet at all:** tell the user what the call would cost and offer the quickest setup —
+   AgentCash (`claude mcp add agentcash --scope user -- npx -y agentcash@latest`, then fund it
+   with a few dollars of USDC on Base) or the Coinbase Agentic Wallet
+   (`npx awal@latest auth login <email>`, then fund it).
 
-**If the `netintel` MCP server is available** (this plugin installs it), call its tools —
-they are named `netintel_<endpoint>` (`netintel_dns_lookup`, `netintel_ssl_cert`,
-`netintel_web_fetch`, …) and pay automatically from the configured wallet. Prefer them.
-With no wallet configured a tool answers with its price and how to fund.
-`netintel_wallet_status` reports the wallet and its USDC balance.
+The typed `netintel_*` tools come from the `netintel` MCP server, which a skill registry does
+not install: add it with the Claude Code plugin (`/plugin marketplace add kjgueye/netintel-mcp`)
+or `claude mcp add netintel-mcp -- npx -y netintel-mcp` — see
+https://github.com/kjgueye/netintel-mcp#readme. Options 2–4 need no NetIntel install at all.
 
-**Otherwise, pay with any x402 client.** The wallet key must come from the environment —
-never ask the user to paste it into the conversation.
+**In your own code**, any x402 client pays these URLs; keep its key in the environment:
 
 ```ts
 import { x402Client } from "@x402/core/client";
@@ -128,7 +149,7 @@ health and price, and says why. NetIntel's own endpoints are labeled and get no 
 
 MCP tools: `netintel_route_search`, `netintel_route_recommend`, `netintel_route_vet`. The router
 does not call the endpoint it recommends: a NetIntel pick maps to a `netintel_*` tool; a
-third-party pick needs your own x402 client (see "How to call"). Daily rankings for 40 common
+third-party pick is paid the same way, with your own wallet (see "How to call and pay"). Daily rankings for 40 common
 agent tasks: https://router.netintel.dev/rankings
 
 ## Spend-aware usage
@@ -148,7 +169,9 @@ agent tasks: https://router.netintel.dev/rankings
 
 ## Wallet setup (one time)
 
-An agent wallet is an ordinary EVM key holding USDC on Base mainnet. Fund it with a few
-dollars (there is no gas to pay — settlement is sponsored). Keep the key in the environment
-(`EVM_PRIVATE_KEY`) or in the plugin's secure configuration; never in prompts, files or logs.
-Solana (USDC) is accepted by the API as well for clients that pay on Solana.
+The simplest wallet is one the agent already uses: AgentCash or the Coinbase Agentic Wallet
+(see "How to call and pay"); fund it with a few dollars of USDC on Base — there is no gas to
+pay, settlement is sponsored. To have the `netintel` MCP server pay directly instead, give it a
+dedicated EVM key holding USDC on Base mainnet, kept in the environment (`EVM_PRIVATE_KEY`) or
+in the plugin's secure configuration — never in prompts, files or logs. Solana (USDC) is
+accepted by the API as well for clients that pay on Solana.

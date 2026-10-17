@@ -1,6 +1,6 @@
 {
   "name": "netintel",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "Pay-per-call network, domain, web and inference lookups for agents — DNS, SSL, WHOIS, IP reputation, email verification, web fetch & search, OpenAI-compatible gateway, embeddings, market data — paid per call in USDC over x402. No API keys.",
   "author": {
     "name": "NetIntel",
@@ -44,7 +44,7 @@
     "evm_private_key": {
       "type": "string",
       "title": "Agent wallet private key (Base)",
-      "description": "Optional. Private key (0x…) of a dedicated agent wallet holding USDC on Base mainnet; each paid tool call pays its listed price from it (gasless). Leave empty to start wallet-less: tools then explain what a call costs and how to fund. Stored in secure storage.",
+      "description": "Optional — leave empty if you use AgentCash, the Coinbase Agentic Wallet or Coinbase Wallet MCP: each paid tool then hands that wallet the exact request and its price. Otherwise: private key (0x…) of a dedicated agent wallet holding USDC on Base mainnet, and each paid call pays its listed price from it (gasless). Stored in secure storage.",
       "sensitive": true,
       "required": false
     },

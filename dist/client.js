@@ -69,7 +69,7 @@ export async function createClient() {
     if (!key) {
         console.error("[netintel-mcp] No EVM_PRIVATE_KEY set — running wallet-less. " +
             (FREE_TOOLS.length ? `Free-tier tools work (${FREE_TOOLS.join(", ")}); ` : "") +
-            "paid tools will explain how to fund an agent wallet.");
+            "paid tools hand back a ready-to-pay request for the agent's own wallet (AgentCash, Coinbase Agentic Wallet or Coinbase Wallet MCP).");
         return plain;
     }
     const signer = privateKeyToAccount(key);

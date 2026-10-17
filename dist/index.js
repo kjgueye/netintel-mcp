@@ -3,6 +3,7 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
 import { createClient, configuredWallet, walletUsdcBalance, spendStatus, FREE_TOOLS } from "./client.js";
+import { requestFromAxios, payHandoffText } from "./pay-handoff.js";
 function ok(data) {
     return { content: [{ type: "text", text: JSON.stringify(data) }] };
 }
@@ -15,6 +16,22 @@ function err(e) {
     const limitAt = msg.indexOf("SPEND_LIMIT:");
     if (limitAt >= 0) {
         return { content: [{ type: "text", text: `Payment refused by your spending limit — nothing was paid. ${msg.slice(limitAt)}` }], isError: true };
+    }
+    if (status === 402 && !configuredWallet()) {
+        // No key here: hand over the exact request so the agent can buy it with a
+        // wallet it already has (AgentCash / awal / Coinbase Wallet MCP). See
+        // src/pay-handoff.ts. Falls through to the generic text if the request
+        // cannot be rebuilt.
+        const req = requestFromAxios(ax.config, ax.response?.data);
+        if (req) {
+            return {
+                content: [
+                    { type: "text", text: payHandoffText(req) },
+                    { type: "text", text: JSON.stringify({ pay_with_your_wallet: req }) },
+                ],
+                isError: true,
+            };
+        }
     }
     if (status === 402) {
         // The one error a user can act on: the call needs a payment that did not
@@ -1355,7 +1372,13 @@ function registerWalletTool(server) {
             ? { free_without_wallet: [...FREE_TOOLS], note: "Free tools are rate-limited per client (about 30/hour); over the quota they cost their normal price." }
             : {};
         if (!address) {
-            return ok({ wallet_configured: false, how_to_fund: "Set EVM_PRIVATE_KEY (or the plugin's wallet config) to a dedicated agent wallet, then send it a few dollars of USDC on Base mainnet — no ETH needed, settlement is gasless.", ...free });
+            return ok({
+                wallet_configured: false,
+                pay_with_your_own_wallet: "No key is needed if the agent already has a wallet: every paid tool then answers with the exact request and its price, ready for AgentCash (`fetch` tool), Coinbase Agentic Wallet (`npx awal@latest x402 pay …`) or Coinbase Wallet MCP (`initiate_x402_request`). That wallet's own spending limits apply.",
+                get_a_wallet: "AgentCash: `claude mcp add agentcash --scope user -- npx -y agentcash@latest`. Coinbase Agentic Wallet: `npx awal@latest auth login <email>`. Fund either with a few dollars of USDC on Base.",
+                how_to_fund: "Or set EVM_PRIVATE_KEY (or the plugin's wallet config) to a dedicated agent wallet, then send it a few dollars of USDC on Base mainnet — no ETH needed, settlement is gasless. This server then pays directly, within its spending limits.",
+                ...free,
+            });
         }
         try {
             const usdc = await walletUsdcBalance();
