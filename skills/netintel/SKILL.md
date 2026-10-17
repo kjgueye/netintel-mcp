@@ -131,12 +131,14 @@ request returns a `400` that names the missing field — not a charge.
 
 ## Which endpoint
 
-The most common paid job is **checking a sales lead before outreach** — the first three rows:
-does the address exist, is the company's email set up properly, and (for an unfamiliar company)
-how old its domain is. Run rows 1–2 for every lead; add row 3 only when it matters.
+The most common paid job is **checking a sales lead before outreach**. The first row does it in
+one call and returns a verdict — `yes`, `risky` or `no`, with reasons — from three checks: does
+the address exist, is the company's email set up properly, and how old its domain is. The next
+three rows are those checks on their own, for when you need only one.
 
 | Task | Endpoint | Price |
 |---|---|---|
+| Sales lead check, all in one — is this lead safe to email? (verdict + reasons) | `GET /lead/check?email=` | $0.005 |
 | Sales lead check 1 — does the email address exist (syntax, MX, disposable/role/free provider) | `GET /email/verify?email=` | $0.001 |
 | Sales lead check 2 — is the company's email set up (SPF/DKIM/DMARC, spoofing risk) | `POST /email-auth {"domain"}` | $0.002 |
 | Sales lead check 3 — how old is the company's domain (new domains are riskier) | `GET /domain-age/check?domain=` | $0.03 |
