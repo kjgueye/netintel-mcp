@@ -131,21 +131,25 @@ request returns a `400` that names the missing field — not a charge.
 
 ## Which endpoint
 
+The most common paid job is **checking a sales lead before outreach** — the first three rows:
+does the address exist, is the company's email set up properly, and (for an unfamiliar company)
+how old its domain is. Run rows 1–2 for every lead; add row 3 only when it matters.
+
 | Task | Endpoint | Price |
 |---|---|---|
+| Sales lead check 1 — does the email address exist (syntax, MX, disposable/role/free provider) | `GET /email/verify?email=` | $0.001 |
+| Sales lead check 2 — is the company's email set up (SPF/DKIM/DMARC, spoofing risk) | `POST /email-auth {"domain"}` | $0.002 |
+| Sales lead check 3 — how old is the company's domain (new domains are riskier) | `GET /domain-age/check?domain=` | $0.03 |
 | Resolve DNS records (A/AAAA/MX/TXT/NS/CNAME/SOA, SPF/DMARC parsed) | `GET /dns/lookup?domain=` | $0.002 |
 | Check an SSL/TLS certificate (expiry, chain, issuer) | `GET /ssl/cert?domain=` | $0.003 |
 | Full TLS analysis (protocols, ciphers, weaknesses) | `GET /ssl/analyze?domain=` | $0.007 |
 | WHOIS / RDAP registration data | `GET /whois-rdap/lookup?domain=` | $0.003 |
 | Is a domain available to register | `GET /domain-availability/check?domain=` | $0.01 |
-| Domain age | `GET /domain-age/check?domain=` | $0.03 |
 | Vet candidate domain names (availability, quality, typosquats, collisions) | `POST /domain/vet` | $0.20 |
-| Email deliverability & SPF/DKIM/DMARC | `GET /email-auth?domain=` | $0.002 |
-| Verify an email address exists | `GET /email/verify?email=` | $0.001 |
 | IP geolocation | `GET /ip-geo/locate?ip=` | $0.002 |
 | IP reputation / malicious-IP check (AbuseIPDB + OTX) | `GET /ip-reputation/analyze?ip=` | $0.05 |
 | Fetch a URL and get the raw body (JSON parsed, else text) | `POST /web/fetch {"url"}` | $0.003 |
-| Extract a page or PDF as clean Markdown | `POST /web/extract {"url"}` | $0.003 |
+| Extract a page or PDF as clean Markdown | `GET /web/extract?url=` | $0.003 |
 | Web search (results + snippets) | `POST /web/search {"query"}` | $0.01 |
 | Answer a question from the web, with citations | `POST /exa/answer {"query"}` | $0.01 |
 | OpenAI-compatible chat completions (15 models) | `POST /v1/chat/completions` | $0.005–$0.65 by model |
