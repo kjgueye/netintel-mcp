@@ -21,7 +21,7 @@
     "test": "tsc && node --test tests/*.test.mjs",
     "test:live": "tsc && node tests/walletless-live.mjs",
     "dev": "ts-node src/index.ts",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm test"
   },
   "keywords": [
     "mcp",

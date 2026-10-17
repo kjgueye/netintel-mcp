@@ -35,7 +35,13 @@ let walletAddress = null;
  */
 const SPEND_LIMIT = "SPEND_LIMIT";
 function limit(envName, fallback) {
-    const n = Number(process.env[envName]);
+    // Empty means unset: Number("") is 0, which would refuse every payment. A
+    // config that writes the variable with no value (an unset plugin option with
+    // no default resolves to "") must get the default, not a $0 limit.
+    const raw = process.env[envName]?.trim();
+    if (!raw)
+        return fallback;
+    const n = Number(raw);
     return Number.isFinite(n) && n >= 0 ? n : fallback;
 }
 export const MAX_PER_CALL_USD = limit("NETINTEL_MAX_PER_CALL_USD", 0.25);

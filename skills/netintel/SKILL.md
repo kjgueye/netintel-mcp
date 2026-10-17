@@ -2,6 +2,23 @@
 name: netintel
 description: 'Pay-per-call lookups for agents via NetIntel over x402 (USDC on Base or Solana, no API key): DNS records, SSL/TLS certificates, WHOIS/RDAP, domain age and availability, IP geolocation and reputation, email verification and SPF/DKIM/DMARC, fetching a URL or PDF as text or JSON, web search with citations, an OpenAI-compatible chat model, embeddings, structured extraction and classification, crypto/FX/prediction-market prices. Also finds which x402 endpoint from any provider fits a job (NetIntel Router: free ranked search, live-checked recommendations, endpoint vetting). Paid calls cost $0.001–$0.65 each, paid from AgentCash, the Coinbase Agentic Wallet (awal), Coinbase Wallet MCP or the netintel MCP server.'
 license: MIT
+metadata:
+  openclaw:
+    homepage: https://netintel.dev
+    requires:
+      anyBins:
+        - npx
+        - curl
+    envVars:
+      - name: EVM_PRIVATE_KEY
+        required: false
+        description: Optional, and only for the netintel MCP server installed directly with its own key (never the Claude Code plugin). A dedicated agent wallet holding a little USDC on Base; never paste it into a conversation.
+      - name: NETINTEL_MAX_PER_CALL_USD
+        required: false
+        description: Per-call spending limit in USD for that key mode (default 0.25).
+      - name: NETINTEL_MAX_SESSION_USD
+        required: false
+        description: Per-session spending limit in USD for that key mode (default 5).
 ---
 
 # NetIntel — paid lookups an agent can make without an account
@@ -28,9 +45,9 @@ price.
 - **Enforceable limits (netintel-mcp ≥ 1.1.55):** the server refuses to sign any payment above
   `NETINTEL_MAX_PER_CALL_USD` (default **$0.25**) or once it has authorized more than
   `NETINTEL_MAX_SESSION_USD` (default **$5.00**) in total during its process lifetime. A refusal
-  returns `SPEND_LIMIT: …` naming the limit; nothing is signed or sent. Both are set by env or
-  in the Claude Code plugin's configuration; `netintel_wallet_status` shows the limits and the
-  session's authorized total. With another wallet, cap each call at its price — AgentCash
+  returns `SPEND_LIMIT: …` naming the limit; nothing is signed or sent. Both are set by env
+  when the server is installed directly with a key (the Claude Code plugin never holds one);
+  `netintel_wallet_status` shows the limits and the session's authorized total. With another wallet, cap each call at its price — AgentCash
   `fetch` takes a maximum amount, `awal x402 pay` takes `--max-amount`, Wallet MCP takes
   `maxPayment` — and rely on that wallet's own limits; where a client has **no** limit the
   wallet balance is the only cap, so fund it with only what you are willing to spend.
@@ -43,8 +60,8 @@ key into the conversation.** Send the header `X-NetIntel-Via: skill` with these 
 it only tells NetIntel which integration a call came from and changes nothing about the call or
 its price.
 
-1. **The `netintel` MCP server with a wallet key** (`netintel_wallet_status` reports
-   `wallet_configured: true`): call its tools, named `netintel_<endpoint>`
+1. **The `netintel` MCP server installed directly with a wallet key** (`netintel_wallet_status`
+   reports `wallet_configured: true`): call its tools, named `netintel_<endpoint>`
    (`netintel_dns_lookup`, `netintel_ssl_cert`, `netintel_web_fetch`, …). They pay
    automatically within the server's spending limits.
 2. **AgentCash** (the agent has its `fetch` tool): call `fetch` with the endpoint URL —
@@ -63,7 +80,8 @@ its price.
    (e.g. `"0.002"`); the user approves the
    payment in Coinbase Wallet; then call `complete_x402_request` with the `requestId`. One
    approval per call, so it suits the pricier endpoints best.
-5. **The `netintel` MCP server without a key:** every paid tool answers with the exact request
+5. **The `netintel` MCP server without a key** (how the Claude Code plugin always runs): every
+   paid tool answers with the exact request
    (URL, method, body, headers) and its price, ready for option 2, 3 or 4 — use it as given.
 6. **No wallet at all:** tell the user what the call would cost and offer the quickest setup —
    AgentCash (`claude mcp add agentcash --scope user -- npx -y agentcash@latest`, then fund it
@@ -71,9 +89,11 @@ its price.
    (`npx awal@latest auth login <email>`, then fund it).
 
 The typed `netintel_*` tools come from the `netintel` MCP server, which a skill registry does
-not install: add it with the Claude Code plugin (`/plugin marketplace add kjgueye/netintel-mcp`)
-or `claude mcp add netintel-mcp -- npx -y netintel-mcp` — see
-https://github.com/kjgueye/netintel-mcp#readme. Options 2–4 need no NetIntel install at all.
+not install. The Claude Code plugin (`/plugin marketplace add kjgueye/netintel-mcp`) installs it
+in wallet-handoff mode: it never holds a key or signs a payment, and hands every paid call to
+the agent's own wallet (option 5). To let the server pay directly instead, install it yourself
+with a dedicated key: `claude mcp add netintel -e EVM_PRIVATE_KEY=0x… -- npx -y netintel-mcp` —
+see https://github.com/kjgueye/netintel-mcp#readme. Options 2–4 need no NetIntel install at all.
 
 **In your own code**, any x402 client pays these URLs; keep its key in the environment:
 
@@ -177,7 +197,7 @@ agent tasks: https://router.netintel.dev/rankings
 
 The simplest wallet is one the agent already uses: AgentCash or the Coinbase Agentic Wallet
 (see "How to call and pay"); fund it with a few dollars of USDC on Base — there is no gas to
-pay, settlement is sponsored. To have the `netintel` MCP server pay directly instead, give it a
-dedicated EVM key holding USDC on Base mainnet, kept in the environment (`EVM_PRIVATE_KEY`) or
-in the plugin's secure configuration — never in prompts, files or logs. Solana (USDC) is
+pay, settlement is sponsored. To have the `netintel` MCP server pay directly instead (a direct
+install, not the Claude Code plugin), give it a dedicated EVM key holding USDC on Base mainnet,
+kept in the environment (`EVM_PRIVATE_KEY`) — never in prompts, files or logs. Solana (USDC) is
 accepted by the API as well for clients that pay on Solana.
