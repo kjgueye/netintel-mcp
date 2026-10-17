@@ -2,33 +2,46 @@
 
 MCP server for NetIntel — 123 network intelligence tools for AI agents.
 DNS, SSL, WHOIS, email security, cloud fingerprinting, OSINT and more.
-Pay-per-call via x402 — the NetIntel API accepts USDC on Base or Solana; this MCP server pays on Base. No API keys needed — just a wallet with USDC.
+Pay-per-call via x402 — the NetIntel API accepts USDC on Base or Solana. No API keys, and no private key to paste: pay from the wallet your agent already has (AgentCash, Coinbase Agentic Wallet or Coinbase Wallet MCP), or give this server a dedicated wallet key.
 Plus 3 router tools that find the best x402 endpoint for a job from **any** provider — [details below](#find-the-right-x402-endpoint-from-any-provider).
 
 ## Install as a Claude Code plugin (recommended)
 
-The plugin installs the MCP server **and** a skill that knows which NetIntel endpoint fits a task and what it costs, and prompts once for the agent wallet key (stored in Claude Code's secure storage, never in settings files):
+The plugin installs the MCP server **and** a skill that knows which NetIntel endpoint fits a task, what it costs and how to pay it from the agent's wallet. It asks for an optional agent wallet key (stored in Claude Code's secure storage, never in settings files) — leave it empty if you use AgentCash or the Coinbase Agentic Wallet:
 
 ```
 /plugin marketplace add kjgueye/netintel-mcp
 /plugin install netintel@netintel
 ```
 
-Then just ask — "is this IP malicious?", "does this domain have DMARC?", "fetch this URL as JSON" — and the tools pay per call from that wallet.
+Then just ask — "is this IP malicious?", "does this domain have DMARC?", "fetch this URL as JSON" — and each call is paid from your wallet.
+
+## Pay with the wallet you already have
+
+With no `EVM_PRIVATE_KEY` set, every paid tool answers with the exact request — URL, method, body — and its price, ready for the agent's own wallet:
+
+- **AgentCash** — the agent calls its `fetch` tool with that request. Install: `claude mcp add agentcash --scope user -- npx -y agentcash@latest`.
+- **Coinbase Agentic Wallet** — `npx awal@latest x402 pay '<url>' [-X POST -d '<json>'] --max-amount <atomic>`. Log in once with `npx awal@latest auth login <email>`.
+- **Coinbase Wallet MCP** — `initiate_x402_request`, approve the payment in Coinbase Wallet, then `complete_x402_request`.
+
+That wallet's own spending limits apply. The bundled skill (`skills/netintel/SKILL.md`) calls NetIntel the same way even without this server.
 
 ## Install
 
 ```bash
-claude mcp add netintel-mcp -- --env EVM_PRIVATE_KEY=0xYOUR_PRIVATE_KEY
+# pay from AgentCash, Coinbase Agentic Wallet or Coinbase Wallet MCP
+claude mcp add netintel -- npx -y netintel-mcp
+# or let this server pay from a dedicated wallet
+claude mcp add netintel -e EVM_PRIVATE_KEY=0xYOUR_PRIVATE_KEY -- npx -y netintel-mcp
 ```
 
-Or add manually to your Claude Desktop config:
+Or add manually to your Claude Desktop config (the `env` block is optional — leave it out to pay from your own wallet as above):
 ```json
 {
   "mcpServers": {
     "netintel": {
       "command": "npx",
-      "args": ["netintel-mcp"],
+      "args": ["-y", "netintel-mcp"],
       "env": {
         "EVM_PRIVATE_KEY": "0xYOUR_PRIVATE_KEY"
       }
@@ -38,8 +51,9 @@ Or add manually to your Claude Desktop config:
 ```
 
 ## Requirements
-- **Optional:** `EVM_PRIVATE_KEY` — a dedicated agent wallet holding USDC on Base mainnet (gasless; a few dollars is plenty). With it, every tool pays its listed price automatically.
-- **Without a wallet** the server still runs: every tool replies with what it costs and how to fund, and `netintel_wallet_status` shows the wallet and its USDC balance. **Spending limits (≥1.1.55):** the server refuses to sign a payment above `NETINTEL_MAX_PER_CALL_USD` (default $0.25) or once it has authorized `NETINTEL_MAX_SESSION_USD` (default $5) in total per process; a refusal returns `SPEND_LIMIT: …` and nothing is paid. Listed prices are what a call costs, not a cap — with a wallet configured every 402 is paid automatically, so authorize paid calls with your user first.
+- **None to start.** Without a key every paid tool hands back a ready-to-pay request (see above), and `netintel_wallet_status` explains the options.
+- **Optional:** `EVM_PRIVATE_KEY` — a dedicated agent wallet holding USDC on Base mainnet (gasless; a few dollars is plenty). With it, this server pays every tool's listed price automatically.
+- **Spending limits (≥1.1.55):** with a key, the server refuses to sign a payment above `NETINTEL_MAX_PER_CALL_USD` (default $0.25) or once it has authorized `NETINTEL_MAX_SESSION_USD` (default $5) in total per process; a refusal returns `SPEND_LIMIT: …` and nothing is paid. Listed prices are what a call costs, not a cap — with a key configured every 402 is paid automatically, so authorize paid calls with your user first.
 
 ## Tools
 
@@ -55,7 +69,7 @@ Or add manually to your Claude Desktop config:
 | netintel_cloud_fingerprint | Fingerprints a domain's cloud infrastructure — DNS records, HTTP… | $0.01 |
 | netintel_schema_parse | Extract structured data from any unstructured text into your own JSON… | $0.01 |
 | netintel_asn_lookup | Resolves an IP address or domain to its Autonomous System Number (ASN)… | $0.03 |
-| netintel_whois_lookup | Domain registration lookup, WHOIS via RDAP — registrar, registration… | $0.003 |
+| netintel_whois_lookup | WHOIS domain lookup via RDAP — domain registration data: registrar… | $0.003 |
 | netintel_cert_transparency | Query the crt.sh certificate transparency log database to enumerate all… | $0.01 |
 | netintel_subnet_calc | Calculates IPv4/IPv6 subnet details from CIDR notation —… | $0.005 |
 | netintel_dns_propagation | Query a domain's DNS record across 10 geographically distributed public… | $0.03 |
@@ -95,7 +109,7 @@ Or add manually to your Claude Desktop config:
 | netintel_content_moderate | Moderate text content using Claude Haiku — flags categories like… | $0.005 |
 | netintel_entity_extract | Extract named entities from text using Claude Haiku — people… | $0.05 |
 | netintel_sentiment | Sentiment analysis API — analyze sentiment of text and get a text… | $0.002 |
-| netintel_text_summarize | Text summarizer / summarization API — condense text, Markdown, or a URL… | $0.005 |
+| netintel_text_summarize | Summarize text, articles or documents — condense raw text, Markdown, or… | $0.005 |
 | netintel_translate | Translate up to 2000 words between languages using Claude Haiku —… | $0.02 |
 | netintel_translate_short | Translate text between languages — text translation API for short… | $0.01 |
 | netintel_domain_due_diligence | One call combines domain availability, heuristic value appraisal, and… | $0.20 |
@@ -111,7 +125,7 @@ Or add manually to your Claude Desktop config:
 | netintel_markdown | Convert messy HTML or text into clean, well-structured Markdown using… | $0.03 |
 | netintel_normalize | Conform messy or inconsistent JSON to a target schema using Claude… | $0.05 |
 | netintel_text_to_json | Turn unstructured text into structured JSON matching a caller-supplied… | $0.05 |
-| netintel_web | Extract text from a web page or PDF as clean Markdown — HTML to… | $0.003 |
+| netintel_web | Extract web content from any page or PDF as clean Markdown — web page… | $0.003 |
 | netintel_money | Normalize any messy money string into a typed decimal amount plus ISO… | $0.01 |
 | netintel_calendar | Turn event fields into a valid RFC 5545 .ics calendar file — handles… | $0.005 |
 | netintel_event_classify | Cheap, fast "is this a dateable event?" filter for social and web text… | $0.02 |
@@ -151,14 +165,14 @@ Or add manually to your Claude Desktop config:
 | netintel_currency_exchange_batch | Convert one base currency to up to 30 targets in a single call — fiat… | $0.02 |
 | netintel_currency_exchange_history | Daily historical exchange-rate series for any currency pair — fiat via… | $0.02 |
 | netintel_token_info | Full profile for any ERC-20 token by contract address — name, symbol… | $0.02 |
-| netintel_wallet_balance | Native + USDC + custom-token balances for any wallet on Base, Ethereum… | $0.005 |
+| netintel_wallet_balance | Token balance for any wallet — native coin, USDC and any ERC-20 on… | $0.005 |
 | netintel_wallet_intel | Counterparty due-diligence for any Base or Ethereum wallet — age… | $0.05 |
 | netintel_iban_validate | Validate any IBAN offline — mod-97 check digits, per-country structure… | $0.005 |
 | netintel_market_snapshot | One-call market briefing for agents — BTC/ETH/SOL spot + 24h moves… | $0.05 |
 | netintel_web_fetch | Fetch any URL and get the raw body back — JSON parsed, everything else… | $0.003 |
-| netintel_weather_current | Live weather + 3-day forecast for any city or lat/lon worldwide —… | $0.002 |
+| netintel_weather_current | Current weather for any city or lat/lon worldwide, plus a 3-day… | $0.002 |
 | netintel_weather_forecast | Multi-day weather forecast for any city or lat/lon worldwide — up to 16… | $0.003 |
-| netintel_prediction_markets | Live prediction-market odds from Polymarket — list the top active… | $0.005 |
+| netintel_prediction_markets | Live prediction market odds from Polymarket — list the top active… | $0.005 |
 | netintel_prediction_market | Full detail for ONE Polymarket prediction market by id or slug —… | $0.003 |
 | netintel_ssl_cert | SSL certificate check for any domain — issuer, subject, SANs, valid… | $0.003 |
 | netintel_text_chunk | Split text into overlapping chunks for RAG ingestion — by characters or… | $0.001 |
