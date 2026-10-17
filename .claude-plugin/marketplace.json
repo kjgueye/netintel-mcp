@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "NetIntel for Claude Code — pay-per-call network, domain, web and inference lookups over x402 (USDC on Base). No API keys; payments go through the agent’s own wallet.",
-    "version": "1.4.0"
+    "version": "1.4.1"
   },
   "plugins": [
     {

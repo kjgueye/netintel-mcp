@@ -7,7 +7,7 @@ Plus 3 router tools that find the best x402 endpoint for a job from **any** prov
 
 ## Install as a Claude Code plugin (recommended)
 
-The plugin installs the MCP server **and** a skill that knows which NetIntel endpoint fits a task, what it costs and how to pay it from the agent's wallet. It asks for an optional agent wallet key (stored in Claude Code's secure storage, never in settings files) — leave it empty if you use AgentCash or the Coinbase Agentic Wallet:
+The plugin installs the MCP server **and** a skill that knows which NetIntel endpoint fits a task, what it costs and how to pay it. It never holds a private key and never signs a payment: each paid tool hands the exact request and its price to the agent's own wallet (below), which pays it under that wallet's own approvals and limits. Nothing to configure:
 
 ```
 /plugin marketplace add kjgueye/netintel-mcp
@@ -26,12 +26,16 @@ With no `EVM_PRIVATE_KEY` set, every paid tool answers with the exact request �
 
 That wallet's own spending limits apply. The bundled skill (`skills/netintel/SKILL.md`) calls NetIntel the same way even without this server.
 
+## What it connects to
+
+The tools call only NetIntel's own hosts: `https://netintel.dev` (the API) and `https://router.netintel.dev` (the router tools). Requests carry the tool's input and, when this server pays with its own key, an x402 payment signature; nothing else from your machine is sent. With a key configured, `netintel_wallet_status` also reads that wallet's USDC balance from Base's public node, `https://mainnet.base.org`. Privacy: https://netintel.dev/privacy · Terms: https://netintel.dev/terms
+
 ## Install
 
 ```bash
 # pay from AgentCash, Coinbase Agentic Wallet or Coinbase Wallet MCP
 claude mcp add netintel -- npx -y netintel-mcp
-# or let this server pay from a dedicated wallet
+# or let this server pay from a dedicated wallet (direct install only; the plugin never takes a key)
 claude mcp add netintel -e EVM_PRIVATE_KEY=0xYOUR_PRIVATE_KEY -- npx -y netintel-mcp
 ```
 
