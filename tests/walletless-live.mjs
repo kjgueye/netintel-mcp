@@ -31,7 +31,8 @@ for (const [name, args] of calls) {
     assert.match(req.url, /^https:\/\/netintel\.dev\//);
     assert.ok(Number(req.max_amount_atomic) > 0, "price present");
     // Replay the exact request unpaid: it must be the same 402 at the same Base price.
-    const r = await fetch(req.url, { method: req.method, headers: { "content-type": "application/json", accept: "application/json" }, ...(req.body !== undefined ? { body: JSON.stringify(req.body) } : {}) });
+    assert.equal(req.headers?.["X-NetIntel-Via"], "mcp-handoff");
+    const r = await fetch(req.url, { method: req.method, headers: { "content-type": "application/json", accept: "application/json", ...req.headers }, ...(req.body !== undefined ? { body: JSON.stringify(req.body) } : {}) });
     const body = await r.json();
     const baseAmt = body.accepts?.find((a) => a.network === "eip155:8453")?.amount;
     assert.equal(r.status, 402);

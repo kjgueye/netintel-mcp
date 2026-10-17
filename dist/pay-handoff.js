@@ -12,6 +12,13 @@ import axios from "axios";
 // limits apply; this server never signs anything in this mode.
 /** USDC on Base — the only rail all three wallets pay on. */
 const BASE = "eip155:8453";
+/**
+ * Tells NetIntel's paid-call ledger which integration the call came from; the
+ * buyer's own client otherwise shows only a generic UA (AgentCash = "node").
+ * Changes nothing about the call or its price.
+ */
+export const VIA_HEADER = "X-NetIntel-Via";
+export const VIA_HANDOFF = "mcp-handoff";
 /** The Base quote from a 402 body (v2 `amount` atomic, v1 `price` "$0.002"). */
 export function priceFrom402(body) {
     const accepts = body?.accepts;
@@ -45,7 +52,7 @@ export function requestFromAxios(config, body402) {
         }
     }
     const price = priceFrom402(body402);
-    return { url, method, ...(body !== undefined ? { body } : {}), ...(price ? { price_usd: price.usd, max_amount_atomic: price.atomic } : {}) };
+    return { url, method, ...(body !== undefined ? { body } : {}), headers: { [VIA_HEADER]: VIA_HANDOFF }, ...(price ? { price_usd: price.usd, max_amount_atomic: price.atomic } : {}) };
 }
 /** Single-quote for a POSIX shell (agents paste these into a terminal). */
 const sq = (s) => `'${s.replace(/'/g, `'\\''`)}'`;
@@ -53,16 +60,20 @@ const sq = (s) => `'${s.replace(/'/g, `'\\''`)}'`;
 export function payHandoffText(r) {
     const usd = r.price_usd !== undefined ? `$${r.price_usd}` : undefined;
     const json = r.body !== undefined ? JSON.stringify(r.body) : undefined;
-    const fetchArgs = { url: r.url, method: r.method, ...(json ? { body: json } : {}) };
+    // Each wallet takes headers in its own shape: AgentCash "Name: value" strings,
+    // awal a JSON object string, Wallet MCP an object.
+    const fetchArgs = { url: r.url, method: r.method, ...(json ? { body: json } : {}), headers: Object.entries(r.headers).map(([k, v]) => `${k}: ${v}`) };
     const awal = [
         "npx awal@latest x402 pay", sq(r.url),
         ...(r.method === "POST" ? ["-X POST"] : []),
         ...(json ? ["-d", sq(json)] : []),
+        "-h", sq(JSON.stringify(r.headers)),
         ...(r.max_amount_atomic ? ["--max-amount", r.max_amount_atomic] : []),
     ].join(" ");
     const initiate = {
         url: r.url, method: r.method,
         ...(r.body !== undefined ? { body: r.body } : {}),
+        headers: r.headers,
         maxPayment: r.price_usd !== undefined ? String(r.price_usd) : "0.01",
     };
     return [

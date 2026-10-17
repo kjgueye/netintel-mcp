@@ -11,7 +11,7 @@ const base = (amount) => ({ network: "eip155:8453", amount });
 
 test("GET: rebuilds the absolute URL with its query and takes the Base price", () => {
   const r = requestFromAxios({ baseURL: BASE, url: "/dns/lookup", method: "get", params: { domain: "example.com" } }, challenge(sol, base("2000")));
-  assert.deepEqual(r, { url: `${BASE}/dns/lookup?domain=example.com`, method: "GET", price_usd: 0.002, max_amount_atomic: "2000" });
+  assert.deepEqual(r, { url: `${BASE}/dns/lookup?domain=example.com`, method: "GET", headers: { "X-NetIntel-Via": "mcp-handoff" }, price_usd: 0.002, max_amount_atomic: "2000" });
 });
 
 test("POST: carries the JSON body as an object", () => {
@@ -43,9 +43,9 @@ test("the text gives one exact call per wallet and never asks for a key in chat"
   const r = requestFromAxios({ baseURL: BASE, url: "/classify", method: "post", data: JSON.stringify({ text: "hi", labels: ["a", "b"] }) }, challenge(base("5000")));
   const t = payHandoffText(r);
   assert.match(t, /costs \$0\.005/);
-  assert.match(t, /AgentCash: call its `fetch` tool with \{"url":"https:\/\/netintel\.dev\/classify","method":"POST","body":"\{\\"text\\":\\"hi\\"/);
-  assert.match(t, /npx awal@latest x402 pay 'https:\/\/netintel\.dev\/classify' -X POST -d '.+' --max-amount 5000/);
-  assert.match(t, /initiate_x402_request` with \{"url":"https:\/\/netintel\.dev\/classify","method":"POST","body":\{"text":"hi","labels":\["a","b"\]\},"maxPayment":"0\.005"\}/);
+  assert.match(t, /AgentCash: call its `fetch` tool with \{"url":"https:\/\/netintel\.dev\/classify","method":"POST","body":"\{\\"text\\":\\"hi\\".*"headers":\["X-NetIntel-Via: mcp-handoff"\]\}/);
+  assert.match(t, /npx awal@latest x402 pay 'https:\/\/netintel\.dev\/classify' -X POST -d '.+' -h '\{"X-NetIntel-Via":"mcp-handoff"\}' --max-amount 5000/);
+  assert.match(t, /initiate_x402_request` with \{"url":"https:\/\/netintel\.dev\/classify","method":"POST","body":\{"text":"hi","labels":\["a","b"\]\},"headers":\{"X-NetIntel-Via":"mcp-handoff"\},"maxPayment":"0\.005"\}/);
   assert.match(t, /Never ask the user to paste a private key into the chat/);
 });
 
@@ -60,4 +60,7 @@ test("the awal command survives a real shell, quotes and all", () => {
   assert.deepEqual(argv.slice(1, 3), ["-X", "POST"]);
   assert.equal(argv[3], "-d");
   assert.deepEqual(JSON.parse(argv[4]), body);
+  assert.equal(argv[5], "-h");
+  assert.deepEqual(JSON.parse(argv[6]), { "X-NetIntel-Via": "mcp-handoff" });
+  assert.deepEqual(argv.slice(7, 9), ["--max-amount", "2000"]);
 });

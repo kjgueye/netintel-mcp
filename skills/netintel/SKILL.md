@@ -39,28 +39,32 @@ price.
 
 Every endpoint is a plain HTTPS URL, so this skill works on its own with whichever wallet the
 agent already has. Use the first option that applies. **Never ask the user to paste a private
-key into the conversation.**
+key into the conversation.** Send the header `X-NetIntel-Via: skill` with these calls (as below):
+it only tells NetIntel which integration a call came from and changes nothing about the call or
+its price.
 
 1. **The `netintel` MCP server with a wallet key** (`netintel_wallet_status` reports
    `wallet_configured: true`): call its tools, named `netintel_<endpoint>`
    (`netintel_dns_lookup`, `netintel_ssl_cert`, `netintel_web_fetch`, …). They pay
    automatically within the server's spending limits.
 2. **AgentCash** (the agent has its `fetch` tool): call `fetch` with the endpoint URL —
-   `{"url":"https://netintel.dev/dns/lookup?domain=example.com"}` for a GET, or
-   `{"url":"https://netintel.dev/web/search","method":"POST","body":"{\"query\":\"…\"}"}` for a
-   POST (`body` is the JSON as a string). It pays the 402 from the AgentCash balance.
+   `{"url":"https://netintel.dev/dns/lookup?domain=example.com","headers":["X-NetIntel-Via: skill"]}`
+   for a GET, or
+   `{"url":"https://netintel.dev/web/search","method":"POST","body":"{\"query\":\"…\"}","headers":["X-NetIntel-Via: skill"]}`
+   for a POST (`body` is the JSON as a string). It pays the 402 from the AgentCash balance.
    `check_endpoint_schema` returns a route's exact input fields without paying.
 3. **Coinbase Agentic Wallet** (`awal`, from a shell):
-   `npx awal@latest x402 pay 'https://netintel.dev/dns/lookup?domain=example.com' --max-amount 2000`,
+   `npx awal@latest x402 pay 'https://netintel.dev/dns/lookup?domain=example.com' -h '{"X-NetIntel-Via":"skill"}' --max-amount 2000`,
    or for a POST
-   `npx awal@latest x402 pay 'https://netintel.dev/web/search' -X POST -d '{"query":"…"}' --max-amount 10000`.
+   `npx awal@latest x402 pay 'https://netintel.dev/web/search' -X POST -d '{"query":"…"}' -h '{"X-NetIntel-Via":"skill"}' --max-amount 10000`.
    `--max-amount` is in USDC atomic units (1000000 = $1): set it to the call's price.
 4. **Coinbase Wallet MCP** (it has `initiate_x402_request`): call it with `url`, `method`,
-   `body` (POST only) and `maxPayment` set to the price (e.g. `"0.002"`); the user approves the
+   `body` (POST only), `headers` `{"X-NetIntel-Via":"skill"}` and `maxPayment` set to the price
+   (e.g. `"0.002"`); the user approves the
    payment in Coinbase Wallet; then call `complete_x402_request` with the `requestId`. One
    approval per call, so it suits the pricier endpoints best.
 5. **The `netintel` MCP server without a key:** every paid tool answers with the exact request
-   (URL, method, body) and its price, ready for option 2, 3 or 4 — use that.
+   (URL, method, body, headers) and its price, ready for option 2, 3 or 4 — use it as given.
 6. **No wallet at all:** tell the user what the call would cost and offer the quickest setup —
    AgentCash (`claude mcp add agentcash --scope user -- npx -y agentcash@latest`, then fund it
    with a few dollars of USDC on Base) or the Coinbase Agentic Wallet
@@ -88,7 +92,9 @@ const client = new x402Client();
 registerExactEvmScheme(client, { signer });
 const fetchWithPay = wrapFetchWithPayment(fetch, client);
 
-const res = await fetchWithPay("https://netintel.dev/dns/lookup?domain=example.com");
+const res = await fetchWithPay("https://netintel.dev/dns/lookup?domain=example.com", {
+  headers: { "X-NetIntel-Via": "skill" },
+});
 console.log(await res.json());
 ```
 

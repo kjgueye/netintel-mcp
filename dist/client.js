@@ -4,6 +4,7 @@ import { privateKeyToAccount } from "viem/accounts";
 import { createPublicClient, http, formatUnits } from "viem";
 import { base } from "viem/chains";
 import axios from "axios";
+import { VIA_HEADER } from "./pay-handoff.js";
 // Canonical domain. The legacy netintel-production-440c.up.railway.app host
 // still serves the same app as a fallback, but new clients target netintel.dev.
 const BASE_URL = "https://netintel.dev";
@@ -65,7 +66,9 @@ export function configuredWallet() {
  */
 export async function createClient() {
     const key = process.env.EVM_PRIVATE_KEY?.trim();
-    const plain = axios.create({ baseURL: BASE_URL });
+    // "mcp" = this server paid with its own key (the wallet-less handoff tells the
+    // agent's wallet to send "mcp-handoff" instead) — see pay-handoff.ts.
+    const plain = axios.create({ baseURL: BASE_URL, headers: { [VIA_HEADER]: "mcp" } });
     if (!key) {
         console.error("[netintel-mcp] No EVM_PRIVATE_KEY set — running wallet-less. " +
             (FREE_TOOLS.length ? `Free-tier tools work (${FREE_TOOLS.join(", ")}); ` : "") +
