@@ -30,6 +30,8 @@ That wallet's own spending limits apply. The bundled skill (`skills/netintel/SKI
 
 The tools call only NetIntel's own hosts: netintel.dev (the API) and router.netintel.dev (the router tools). Requests carry the tool's input and, when this server pays with its own key, an x402 payment signature; nothing else from your machine is sent. With a key configured, `netintel_wallet_status` also reads that wallet's USDC balance from Base's public node, mainnet.base.org.
 
+When the agent pays with its own wallet (AgentCash, Coinbase Agentic Wallet or Coinbase Wallet MCP), that wallet sends the request to netintel.dev and pays it. NetIntel's API passes some tool inputs to the provider that answers them: OpenAI and Anthropic (AI tools), Exa (web search), AbuseIPDB and AlienVault OTX (IP reputation), CoinGecko and blockchain explorers (market and wallet data) and GitHub (repository lookups); fetch tools retrieve the URL you ask for. NetIntel keeps paid-call inputs and results — see the privacy policy.
+
 Privacy policy: [https://netintel.dev/privacy](https://netintel.dev/privacy)
 
 Terms of service: [https://netintel.dev/terms](https://netintel.dev/terms)
