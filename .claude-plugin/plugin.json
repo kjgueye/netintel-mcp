@@ -1,5 +1,6 @@
 {
   "name": "netintel",
+  "displayName": "NetIntel",
   "version": "1.4.2",
   "description": "Pay-per-call network, domain, web and inference lookups for agents — DNS, SSL, WHOIS, IP reputation, email verification, web fetch & search, OpenAI-compatible gateway, embeddings, market data — in USDC over x402. No API keys, and the plugin never holds a key or signs a payment: each paid call is handed, with its exact price, to the agent's own wallet (AgentCash, Coinbase Agentic Wallet or Coinbase Wallet MCP).",
   "author": {
@@ -9,6 +10,10 @@
   },
   "homepage": "https://netintel.dev",
   "repository": "https://github.com/kjgueye/netintel-mcp",
+  "documentationUrl": "https://github.com/kjgueye/netintel-mcp#readme",
+  "supportUrl": "https://netintel.dev/contact",
+  "privacyPolicyUrl": "https://netintel.dev/privacy",
+  "termsOfServiceUrl": "https://netintel.dev/terms",
   "license": "MIT",
   "keywords": [
     "x402",
