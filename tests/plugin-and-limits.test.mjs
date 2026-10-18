@@ -23,6 +23,12 @@ test("the launcher is pinned to the exact version in package.json (directory blo
   assert.deepEqual(server.args, ["-y", `netintel-mcp@${pkg.version}`]);
 });
 
+test("package-lock.json's own version follows package.json (directory launcher lock: LOCK_STALE)", () => {
+  const lock = json("package-lock.json");
+  assert.equal(lock.version, pkg.version);
+  assert.equal(lock.packages[""].version, pkg.version);
+});
+
 test("plugin and marketplace agree on the plugin version", () => {
   assert.equal(market.metadata.version, plugin.version);
   assert.equal(market.plugins[0].name, plugin.name);

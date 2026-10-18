@@ -28,7 +28,11 @@ That wallet's own spending limits apply. The bundled skill (`skills/netintel/SKI
 
 ## What it connects to
 
-The tools call only NetIntel's own hosts: `https://netintel.dev` (the API) and `https://router.netintel.dev` (the router tools). Requests carry the tool's input and, when this server pays with its own key, an x402 payment signature; nothing else from your machine is sent. With a key configured, `netintel_wallet_status` also reads that wallet's USDC balance from Base's public node, `https://mainnet.base.org`. Privacy: https://netintel.dev/privacy · Terms: https://netintel.dev/terms
+The tools call only NetIntel's own hosts: netintel.dev (the API) and router.netintel.dev (the router tools). Requests carry the tool's input and, when this server pays with its own key, an x402 payment signature; nothing else from your machine is sent. With a key configured, `netintel_wallet_status` also reads that wallet's USDC balance from Base's public node, mainnet.base.org.
+
+Privacy policy: [https://netintel.dev/privacy](https://netintel.dev/privacy)
+
+Terms of service: [https://netintel.dev/terms](https://netintel.dev/terms)
 
 ## Install
 
