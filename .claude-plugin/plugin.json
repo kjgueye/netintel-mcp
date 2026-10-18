@@ -1,6 +1,6 @@
 {
   "name": "netintel",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "Pay-per-call network, domain, web and inference lookups for agents — DNS, SSL, WHOIS, IP reputation, email verification, web fetch & search, OpenAI-compatible gateway, embeddings, market data — in USDC over x402. No API keys, and the plugin never holds a key or signs a payment: each paid call is handed, with its exact price, to the agent's own wallet (AgentCash, Coinbase Agentic Wallet or Coinbase Wallet MCP).",
   "author": {
     "name": "NetIntel",
@@ -31,7 +31,7 @@
       "command": "npx",
       "args": [
         "-y",
-        "netintel-mcp@1.1.65"
+        "netintel-mcp@1.1.66"
       ],
       "env": {
         "EVM_PRIVATE_KEY": ""

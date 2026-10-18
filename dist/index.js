@@ -1314,6 +1314,16 @@ function registerTools(server, api) {
             return err(e);
         }
     });
+    // 125. Lead (POST)
+    server.tool("netintel_lead_check", "Check a sales lead before outreach — one call verifies the email address (syntax, MX, disposable/role/free-provider), the company's email setup (SPF/DKIM/DMARC) and its domain age, and returns a verdict: yes, risky or no, with…", { email: z.string() }, async ({ email }) => {
+        try {
+            const res = await api.post("/lead/check", { email });
+            return ok(res.data);
+        }
+        catch (e) {
+            return err(e);
+        }
+    });
 }
 // The NetIntel Router: "which x402 endpoint should I call?" over the whole
 // Coinbase Bazaar catalog — every provider, not only NetIntel — on its own host.

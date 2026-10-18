@@ -1,6 +1,6 @@
 # netintel-mcp
 
-MCP server for NetIntel — 123 network intelligence tools for AI agents.
+MCP server for NetIntel — 124 network intelligence tools for AI agents.
 DNS, SSL, WHOIS, email security, cloud fingerprinting, OSINT and more.
 Pay-per-call via x402 — the NetIntel API accepts USDC on Base or Solana. No API keys, and no private key to paste: pay from the wallet your agent already has (AgentCash, Coinbase Agentic Wallet or Coinbase Wallet MCP), or give this server a dedicated wallet key.
 Plus 3 router tools that find the best x402 endpoint for a job from **any** provider — [details below](#find-the-right-x402-endpoint-from-any-provider).
@@ -61,7 +61,7 @@ Or add manually to your Claude Desktop config (the `env` block is optional — l
 
 ## Tools
 
-123 pay-per-call tools across DNS, SSL/TLS, WHOIS & domains, email security, IP intelligence, web & content, OSINT, AI text processing, and bundled reports.
+124 pay-per-call tools across DNS, SSL/TLS, WHOIS & domains, email security, IP intelligence, web & content, OSINT, AI text processing, and bundled reports.
 
 | Tool | Description | Price |
 |------|-------------|-------|
@@ -188,6 +188,7 @@ Or add manually to your Claude Desktop config (the `env` block is optional — l
 | netintel_exa_contents | Clean page text for up to 3 URLs in one call via Exa's index + live… | $0.005 |
 | netintel_exa_answer | Ask a question, get a direct answer grounded in a live web search, with… | $0.01 |
 | netintel_pdf_parse | Parse a PDF to text and Markdown: send a PDF url or base64 file, get… | $0.005 |
+| netintel_lead_check | Check a sales lead before outreach — one call verifies the email… | $0.005 |
 
 ## Find the right x402 endpoint from any provider
 
